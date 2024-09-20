@@ -17,31 +17,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import DB.queryDB;
-
+import DB.updateDB;
 /**
  *
  * @author alumne
  */
-@WebServlet(name = "login", urlPatterns = {"/login"})
-public class login {
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
- 
+@WebServlet(name = "register", urlPatterns = {"/register"})
+public class Register {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Connection connection = null;
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
-            String query;
-            PreparedStatement statement;
+          
             
             Class.forName("org.apache.derby.jdbc.ClientDriver");
 
@@ -53,16 +41,17 @@ public class login {
             */                     
             String user = request.getParameter("id_usuario");
             String passw = request.getParameter("password");
-            //if(user == null or passw == null) errors.login_errors(0, true);
+            //if(user == null or passw == null) errors.errors(0, true);
             
             
-           int res = queryDB.user_login(user,passw);
-           switch(res) {
-               case 0:
-                   response.Redirect("http://localhost:8080/menu");
-                   
-               default:
-                   //errors.login_error(res, false);
+            int res = queryDB.exists_user(user, passw);
+           
+            if (res != 0) /*errors.error(res, false)*/;
+            else {
+                res = updateDB.add_user(user, passw);
+                
+                if (res == 0) response.sendRedirect("http://localhost:8080/menu");   
+                else /*errors.error(res, false)*/;
            }
             
 
@@ -89,5 +78,5 @@ public class login {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
 }
+

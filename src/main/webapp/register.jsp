@@ -1,6 +1,6 @@
 <%-- 
-    Document   : login
-    Created on : 20 sept 2024, 10:21:56
+    Document   : register
+    Created on : 20 sept 2024, 19:37:54
     Author     : alumne
 --%>
 
@@ -12,19 +12,19 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>LOGIN</h1>
-        <form action="log" method="POST">
+        <h1>REGISTER</h1>
+        <form action="reg" method="post">
             <ul>
                 <label for="id_usuario">Usuario:</label>
                 <input type="text" id="id_usuario" name="id_usuario" />
                 
                 <label for="password">Contraseña:</label>
                 <input type="text" id="password" name="password" />
-                
-                <button type="submit">Login</button>
+                              
+                <button type="submit">Register</button>
                 
                 <li>
-                <a href="http://localhost:8080/practica2/register.jsp">Registrar</a>
+                <a href="http://localhost:8080/practica2/login.jsp">Login</a>
                 </li>
             </ul>
         </form>

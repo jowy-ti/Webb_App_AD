@@ -21,28 +21,25 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author alumne
  */
-public class queryDB {
+public class updateDB {
     
-    static public int exists_user(String id_usuario, String password){
+    static public int add_user(String id_usuario, String password){
         Connection connection = null;
         try {
-   
             connection = DriverManager.getConnection("jdbc:derby://localhost:1527/pr2;user=pr2;password=pr2");
             String query;
             PreparedStatement statement;
-
-
-            query = "select * from usuarios where id_usuario = '"+id_usuario+"' and password = '"+password+"'";
-            statement = connection.prepareStatement(query);
-            ResultSet rs = statement.executeQuery(); 
             
-            if (rs.next()) return -2;
-            
-            return 0;
-            
+            query = "insert into usuarios values(?,?)";
+            statement = connection.prepareStatement(query);    
+            statement.setString(1, id_usuario);
+            statement.setString(2, password);
+            statement.executeUpdate();
+                                 
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return -1;
         }
+        return 0;
     }
 }
