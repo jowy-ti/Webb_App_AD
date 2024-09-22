@@ -1,7 +1,8 @@
-/home/alumne/NetBeansProjects/practica2/src/main/java/test/practica2/JakartaRestConfiguration.java
-/home/alumne/NetBeansProjects/practica2/src/main/java/test/practica2/resources/JakartaEE91Resource.java
-/home/alumne/NetBeansProjects/practica2/src/main/java/servlet/Register.java
-/home/alumne/NetBeansProjects/practica2/src/main/java/Err/errors.java
-/home/alumne/NetBeansProjects/practica2/src/main/java/DB/queryDB.java
-/home/alumne/NetBeansProjects/practica2/src/main/java/servlet/Login.java
-/home/alumne/NetBeansProjects/practica2/src/main/java/DB/updateDB.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/test/TestDB.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/DB/updateDB.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/DB/queryDB.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/servlet/Login.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/Err/errors.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/test/practica2/resources/JakartaEE91Resource.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/servlet/Register.java
+/home/alumne/NetBeansProjects/ad/practica2/src/main/java/test/practica2/JakartaRestConfiguration.java

@@ -21,7 +21,7 @@
                 <label for="password">Contraseña:</label>
                 <input type="text" id="password" name="password" />
                 
-                <button type="submit">Login</button>
+                <button type="submit">Entrar</button>
                 
                 <li>
                 <a href="http://localhost:8080/practica2/register.jsp">Registrar</a>

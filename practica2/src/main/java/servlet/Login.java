@@ -51,18 +51,23 @@ public class Login extends HttpServlet {
             String user = request.getParameter("id_usuario");
             String passw = request.getParameter("password");
             
-            if(user == null || passw == null) errors.login_error(0, true);
+            if(user.equals("") || passw.equals("")) {
+                errors.login_error(0, true);
+                response.sendRedirect("http://localhost:8080/practica2/login.jsp");
+                return;
+            }
             
-            
-           int res = queryDB.exists_user(user,passw);
-           switch(res) {
-               case 0:
-                   response.sendRedirect("http://localhost:8080/practica2/menu.jsp");
+            else {
+                int res = queryDB.exists_user(user,passw);
+                switch(res) {
+                    case 0:
+                    response.sendRedirect("http://localhost:8080/practica2/menu.jsp");
                    
-               default:
-                   errors.login_error(res, false);
-                   response.sendRedirect("http://localhost:8080/practica2/login.jsp");
-           }
+                    default:
+                    errors.login_error(res, false);
+                    response.sendRedirect("http://localhost:8080/practica2/login.jsp");
+                }
+            }
             
         } catch (Exception e) {
             System.err.println(e.getMessage());

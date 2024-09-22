@@ -26,6 +26,7 @@ import DB.updateDB;
 public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
           
@@ -38,12 +39,14 @@ public class Register extends HttpServlet {
             */                     
             String user = request.getParameter("id_usuario");
             String passw = request.getParameter("password");
-            //if(user == null or passw == null) errors.errors(0, true);
-            
-            
+            if (user.equals("") || passw.equals("")) {
+                //errors.errors(0, true);
+                response.sendRedirect("http://localhost:8080/practica2/register.jsp");
+                return;
+            }
+
             int res = queryDB.exists_user(user, passw);
-           
-           
+
             if (res == -2) {
                 res = updateDB.add_user(user, passw);
                 
@@ -52,7 +55,8 @@ public class Register extends HttpServlet {
             }
             else /*errors.error(res, false)*/;
             
-
+            response.sendRedirect("http://localhost:8080/practica2/register.jsp");
+            
         } catch (Exception e) {
             System.err.println(e.getMessage());
         } 
