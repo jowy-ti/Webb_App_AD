@@ -21,8 +21,23 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author alumne
  */
-public class errors extends HttpServlet {
+public class Errors {
+    
     static public void login_error(int err, boolean is_null) {
+        try {
+            
+            //Tratamos error algun parametro nulo
+            if (is_null) 
+            //Los demás errores
+            switch (err){
+                default:
+            }
+        } catch (Exception e) {
+           System.err.println(e.getMessage());
+        }
+    }
+    
+    static public void register_error(int err, boolean is_null) {
         try {
             
             //Tratamos error algun parametro nulo

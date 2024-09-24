@@ -16,8 +16,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import DB.queryDB;
-import Err.errors;
+import jakarta.servlet.http.HttpSession;
+import DB.QueryDB;
+import Err.Errors;
 
 /**
  *
@@ -35,41 +36,36 @@ public class Login extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
  
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-          
-            
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            
-            
-            // SQL Commands to create the database can be found in file database.sql		 		  
-             
+        try {
             
             String user = request.getParameter("id_usuario");
             String passw = request.getParameter("password");
             
+            // Se comprueba si se ha enviado un usuario o contraseña vacios
             if(user.equals("") || passw.equals("")) {
-                errors.login_error(0, true);
+                Errors.login_error(0, true);
                 response.sendRedirect("http://localhost:8080/practica2/login.jsp");
                 return;
             }
             
-            else {
-                int res = queryDB.exists_user(user,passw);
-                switch(res) {
-                    case 0:
-                    response.sendRedirect("http://localhost:8080/practica2/menu.jsp");
-                   
-                    default:
-                    errors.login_error(res, false);
-                    response.sendRedirect("http://localhost:8080/practica2/login.jsp");
-                }
+            // Se comprueba si existe la cuenta, si existe dejamos pasar
+            int res = QueryDB.exists_user(user,passw);
+            
+            if (res == 0) {
+                request.getSession(true);
+                response.sendRedirect("http://localhost:8080/practica2/menu.jsp");
+            }   
+            else {    
+                Errors.login_error(res, false);
+                response.sendRedirect("http://localhost:8080/practica2/menu.jsp");  
             }
             
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }        
     }
@@ -80,6 +76,7 @@ public class Login extends HttpServlet {
      * @return a String containing servlet description
      */
     
+    @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>

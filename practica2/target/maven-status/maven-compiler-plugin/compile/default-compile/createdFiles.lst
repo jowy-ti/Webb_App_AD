@@ -1,7 +1,5 @@
-Err/errors.class
 servlet/Login.class
 test/practica2/resources/JakartaEE91Resource.class
-DB/updateDB.class
-DB/queryDB.class
 servlet/Register.class
 test/practica2/JakartaRestConfiguration.class
+test/TestDB.class

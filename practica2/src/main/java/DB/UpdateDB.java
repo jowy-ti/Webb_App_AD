@@ -16,38 +16,38 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import DB.ConnectionDB;
 
 /**
  *
  * @author alumne
  */
-public class updateDB {
+public class UpdateDB {
     
     static public int add_user(String id_usuario, String password){
-        Connection connection = null;
+        
+        // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
+
         try {
-            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/pr2;user=pr2;password=pr2");
+            
             String query;
             PreparedStatement statement;
             
+            // Actualizamos la DB con una nueva cuenta
             query = "insert into usuarios values(?,?)";
             statement = connection.prepareStatement(query);    
             statement.setString(1, id_usuario);
             statement.setString(2, password);
             statement.executeUpdate();
                                  
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
             return -1;
+            
         } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                // connection close failed.
-                System.err.println(e.getMessage());
-            }
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
         }
         return 0;
     }

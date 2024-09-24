@@ -16,22 +16,25 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import DB.ConnectionDB;
 
 /**
  *
  * @author alumne
  */
-public class queryDB {
+public class QueryDB {
     
     static public int exists_user(String id_usuario, String password){
-        Connection connection = null;
+        
+        // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
+        
         try {
-   
-            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/pr2;user=pr2;password=pr2");
+            
             String query;
             PreparedStatement statement;
 
-
+            // Miramos si existe una cuenta con "id_usuario" y "password";
             query = "select * from usuarios where id_usuario = '"+id_usuario+"' and password = '"+password+"'";
             statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery(); 
@@ -40,18 +43,13 @@ public class queryDB {
             
             return -2; //Usuario no existe
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
             return -1;
+            
         } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                // connection close failed.
-                System.err.println(e.getMessage());
-            }
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
         }
     }
 }

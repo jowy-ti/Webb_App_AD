@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import DB.ConnectionDB;
 
 /**
  *
@@ -25,18 +26,20 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "testDB", urlPatterns = {"/testDB"})
 public class TestDB extends HttpServlet {
     
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
+        // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
 
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            Connection connection = null;
-            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/pr2;user=pr2;password=pr2");
+            
             String query;
             PreparedStatement statement;
                 
+            // Eliminamos las tabals de "image" y "usuarios"
             query = "drop table image";
             statement = connection.prepareStatement(query);
             statement.setQueryTimeout(30);  // set timeout to 30 sec.                      
@@ -45,9 +48,8 @@ public class TestDB extends HttpServlet {
             query = "drop table usuarios"; 
             statement = connection.prepareStatement(query);
             statement.executeUpdate();      
-
-            // fill parameters for prepared statement            
-            // create and fill table usuarios            
+      
+            // Creamos las tablas de "usuarios" y "image"
             query = "create table usuarios (id_usuario varchar (256) primary key, password varchar (256))";
             statement = connection.prepareStatement(query);                        
             statement.executeUpdate();
@@ -61,11 +63,17 @@ public class TestDB extends HttpServlet {
             statement = connection.prepareStatement(query);
             statement.executeUpdate();
                 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
-        } 
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
         response.sendRedirect("http://localhost:8080/practica2/login.jsp");
     }
+    
+    @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>

@@ -16,48 +16,50 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import DB.queryDB;
-import DB.updateDB;
+import DB.QueryDB;
+import DB.UpdateDB;
+import Err.Errors;
 /**
  *
  * @author alumne
  */
 @WebServlet(name = "register", urlPatterns = {"/register"})
 public class Register extends HttpServlet {
+    
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-          
+        try {
             
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-           
-            
-            /*
-            // SQL Commands to create the database can be found in file database.sql		 		  
-            */                     
             String user = request.getParameter("id_usuario");
             String passw = request.getParameter("password");
+            
+            // Se comprueba si se ha enviado un usuario o contraseña vacios
             if (user.equals("") || passw.equals("")) {
-                //errors.errors(0, true);
+                Errors.register_error(0, true);
                 response.sendRedirect("http://localhost:8080/practica2/register.jsp");
                 return;
             }
 
-            int res = queryDB.exists_user(user, passw);
+            // Comprabamos si existen las cuentas y en caso de no exister se crean
+            int res = QueryDB.exists_user(user, passw);
 
             if (res == -2) {
-                res = updateDB.add_user(user, passw);
+                res = UpdateDB.add_user(user, passw);
                 
-                if (res == 0) response.sendRedirect("http://localhost:8080/practica2/login.jsp");   
-                else /*errors.error(res, false)*/;
+                if (res == 0) {
+                    response.sendRedirect("http://localhost:8080/practica2/login.jsp");
+                    return;
+                }   
+                else Errors.register_error(res, false);
             }
-            else /*errors.error(res, false)*/;
+            else Errors.register_error(res, false);
             
             response.sendRedirect("http://localhost:8080/practica2/register.jsp");
             
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         } 
     }
@@ -68,6 +70,7 @@ public class Register extends HttpServlet {
      * @return a String containing servlet description
      */
     
+    @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
