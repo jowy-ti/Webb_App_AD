@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import DB.QueryDB;
 import Err.Errors;
+import java.io.File;
 /**
  *
  * @author alumne
@@ -40,7 +41,7 @@ public class RegistarImagen extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     /**
@@ -72,7 +73,9 @@ public class RegistarImagen extends HttpServlet {
                 //Tratamos error
             }
             
-        } catch (IOException e) {
+            File uploads = new File("/home/alumne/ad/ad/myapp");
+            
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         } 
     }
