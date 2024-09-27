@@ -14,9 +14,10 @@
     <body>
         <center>
             <h1>MENU</h1>
+       
+            <a href="http://localhost:8080/practica2/registrarImagen.jsp">Registrar imagen</a>
+            <br/>
+            <a href="http://localhost:8080/practica2/buscarImagen.jsp">Buscar imagen</a>
         </center>
-        <a href="http://localhost:8080/practica2/registrarImagen.jsp">Registrar imagen</a>
-        
-        <a href="http://localhost:8080/practica2/buscarImagen.jsp">Buscar imagen</a>
     </body>
 </html>
