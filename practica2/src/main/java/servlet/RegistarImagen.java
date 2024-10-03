@@ -56,6 +56,10 @@ public class RegistarImagen extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        HttpSession sesion = request.getSession(false);
+        if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+    
         try {
             //Id es asignado por nosotros (haria un id++ del último id usado en la base de datos
             //Creador == usuario

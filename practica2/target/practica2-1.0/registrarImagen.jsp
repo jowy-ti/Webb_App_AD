@@ -5,6 +5,13 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="jakarta.servlet.http.HttpSession"%>
+
+<% 
+    HttpSession sesion = request.getSession(false);
+    if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
