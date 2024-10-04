@@ -20,7 +20,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import DB.QueryDB;
 import Err.Errors;
-import java.io.File;
+
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 /**
  *
  * @author alumne
@@ -73,7 +77,6 @@ public class RegistarImagen extends HttpServlet {
                 //Tratamos error
             }
             
-            File uploads = new File("/home/alumne/ad/ad/myapp");
             
         } catch (Exception e) {
             System.err.println(e.getMessage());
