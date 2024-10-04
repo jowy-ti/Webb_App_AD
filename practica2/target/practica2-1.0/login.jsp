@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,7 +25,7 @@
                 <button type="submit">Entrar</button>
                 
                 <li>
-                <a href="http://localhost:8080/practica2/register.jsp">Registrar</a>
+                <a href="/practica2/register.jsp">Registrar</a>
                 </li>
             </ul>
         </form>

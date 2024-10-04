@@ -53,7 +53,7 @@ public class UpdateDB {
     }
     
     static public int add_image(String title, String descr, String key_words,
-            String author, String cap_date, String filename){
+            String author, String creator, String cap_date, String filename){
         
         // Se crea una conexión con la DB y se comprueba que ha salido bien
         Connection connection = ConnectionDB.connectDB();
@@ -75,7 +75,7 @@ public class UpdateDB {
             statement.setString(3, descr);
             statement.setString(4, key_words);
             statement.setString(5, author);
-            //statement.setString(6, creator);
+            statement.setString(6, creator);
             statement.setString(7, cap_date);
             statement.setString(8, storage_date);
             statement.setString(9, filename);
