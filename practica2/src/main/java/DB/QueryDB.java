@@ -52,4 +52,31 @@ public class QueryDB {
             ConnectionDB.disconnectDB(connection);
         }
     }
+    
+    static public int search_image(String title_author) {
+        
+        // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
+        
+        try {
+            
+            String query;
+            PreparedStatement statement;
+            
+            query = "select * from image where "
+                    + "title LIKE '%" + title_author + "%' or author LIKE '%" + title_author + "%'";
+            statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            
+            return 0;
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return -1;
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
+    }
 }

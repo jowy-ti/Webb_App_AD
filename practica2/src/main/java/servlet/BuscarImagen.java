@@ -1,0 +1,47 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.SQLException;
+import DB.QueryDB;
+
+/**
+ *
+ * @author alumne
+ */
+
+@WebServlet(name = "BuscarImagen", urlPatterns = {"/BuscarImagen"})
+public class BuscarImagen extends HttpServlet {
+    
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        
+        try {
+            HttpSession sesion = request.getSession(false);
+            if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+            
+            String title_author = request.getParameter("title_author");
+            QueryDB.search_image(title_author);
+            
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+}

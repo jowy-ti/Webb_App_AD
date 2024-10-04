@@ -1,10 +1,10 @@
-servlet/Login.class
 DB/ConnectionDB.class
-Err/Errors.class
 test/practica2/resources/JakartaEE91Resource.class
-DB/QueryDB.class
 servlet/Register.class
-test/practica2/JakartaRestConfiguration.class
 servlet/RegistarImagen.class
-DB/UpdateDB.class
 test/TestDB.class
+servlet/Login.class
+Err/Errors.class
+DB/QueryDB.class
+test/practica2/JakartaRestConfiguration.class
+DB/UpdateDB.class

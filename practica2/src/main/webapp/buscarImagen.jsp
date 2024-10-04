@@ -1,13 +1,13 @@
 <%-- 
-    Document   : menu
-    Created on : 21 sept 2024, 17:24:37
+    Document   : buscarImagen
+    Created on : 4 oct 2024, 10:23:22
     Author     : alumne
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 
-<%
+<% 
     HttpSession sesion = request.getSession(false);
     if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
 %>
@@ -18,11 +18,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <center>
-            <h1>MENU</h1>
-            <a href="/practica2/registrarImagen.jsp">Registrar imagen</a>
-            <br/>
-            <a href="/practica2/buscarImagen.jsp">Buscar imagen</a>
-        </center>
+        <h1>Busqueda a partir de título y autor</h1>
+        <form action="BuscarImagen" method="GET">
+            <ul>
+                <label for="title_author">Introduce algo:</label>
+                <input type="text" id="title_author" name="title_author" />
+                
+                <button type="submit">Search</button>
+            </ul>
+        </form>
     </body>
 </html>
