@@ -57,7 +57,12 @@ public class Login extends HttpServlet {
             int res = QueryDB.exists_user(user,passw);
             
             if (res == 0) {
+<<<<<<< HEAD
                 HttpSession sesion = request.getSession(true);
+=======
+                HttpSession sesion = request.getSession();
+                sesion.setMaxInactiveInterval(10);
+>>>>>>> c751829 (si)
                 sesion.setAttribute("user", user);
                 response.sendRedirect("/practica2/menu.jsp");
             }   

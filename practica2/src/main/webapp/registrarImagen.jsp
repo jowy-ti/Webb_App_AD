@@ -19,6 +19,11 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <% 
+        @page session="true"
+        HttpSession sesion=request.getSession(false);
+        if (sesion == null) response.sendRedirect("http://localhost:8080/practica2/error_out.jsp");
+        %>
         <h1>Registrar Imagen</h1>
         <form action = "registrarImagen" method = "POST" enctype="multipart/form-data">
             
