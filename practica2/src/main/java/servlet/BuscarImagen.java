@@ -32,8 +32,11 @@ public class BuscarImagen extends HttpServlet {
             HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
             
-            String title_author = request.getParameter("title_author");
-            QueryDB.search_image(title_author);
+            String title = request.getParameter("title");
+            String author = request.getParameter("author");
+            String keywords = request.getParameter("keywords");
+            
+            if (QueryDB.search_image(title, author, keywords) != 0) ; //error
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

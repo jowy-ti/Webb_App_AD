@@ -53,18 +53,28 @@ public class QueryDB {
         }
     }
     
-    static public int search_image(String title_author) {
+    static public int search_image(String title, String author, String keywords) {
         
         // Se crea una conexión con la DB y se comprueba que ha salido bien
         Connection connection = ConnectionDB.connectDB();
         
         try {
             
-            String query;
+            String query, querynull;
             PreparedStatement statement;
             
-            query = "select * from image where "
-                    + "title LIKE '%" + title_author + "%' or author LIKE '%" + title_author + "%'";
+            String qtitle = "title LIKE '%"+title+"%'";
+            String qauthor = "author LIKE '%"+author+"%'";
+            String qkeywords = "keywords LIKE '%"+keywords+"%'";   
+            
+            query = "select * from image where ";
+            querynull = "select * from image where ";
+            
+            if (title != null) query = query + qtitle;
+            if (author != null) query = query + qauthor;
+            if (keywords != null) query = query + qkeywords;
+            if (query.equals(querynull)) query = query + "1 = 1";
+            
             statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
             

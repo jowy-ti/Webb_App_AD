@@ -21,8 +21,14 @@
         <h1>Busqueda a partir de título y autor</h1>
         <form action="BuscarImagen" method="GET">
             <ul>
-                <label for="title_author">Introduce algo:</label>
-                <input type="text" id="title_author" name="title_author" />
+                <label for="title">Título:</label>
+                <input type="text" id="title" name="title" />
+                
+                <label for="author">Autor:</label>
+                <input type="text" id="author" name="author" />
+                
+                <label for="keywords">Palabras clave:</label>
+                <input type="text" id="keywords" name="keywords" />
                 
                 <button type="submit">Search</button>
             </ul>
