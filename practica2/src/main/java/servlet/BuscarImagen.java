@@ -13,6 +13,13 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import DB.QueryDB;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -36,8 +43,36 @@ public class BuscarImagen extends HttpServlet {
             String author = request.getParameter("author");
             String keywords = request.getParameter("keywords");
             
-            if (QueryDB.search_image(title, author, keywords) != 0) ; //error
+            ArrayList<String> filenames = QueryDB.search_image(title, author, keywords);
             
+            if (filenames == null) ;//error
+            else if (filenames.isEmpty()) ;//error
+            
+            else {
+                String path = "/home/alumne/Imágenes/";
+
+                for (int i = 0; i < filenames.size(); ++i) {
+                    try {
+                        File imageFile = new File(path+filenames.get(i));
+                        OutputStream out = response.getOutputStream();
+                        
+                        response.setContentType("image/jpg");
+                        response.setContentLength((int) imageFile.length());
+                        
+                        FileInputStream fis = new FileInputStream(imageFile);
+                        OutputStream os = response.getOutputStream();
+                            
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        while ((bytesRead = fis.read(buffer)) != -1) {
+                            os.write(buffer, 0, bytesRead);
+                        }
+                        
+                    } catch (IOException e) {
+                            System.err.println(e.getMessage());
+                    }
+                }
+            }
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
