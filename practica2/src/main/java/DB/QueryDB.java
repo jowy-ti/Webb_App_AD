@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import DB.ConnectionDB;
+import java.util.ArrayList;
 
 /**
  *
@@ -46,6 +47,48 @@ public class QueryDB {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return -1;
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
+    }
+    
+    static public ArrayList<String> search_image(String title, String author, String keywords) {
+        
+        // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
+        
+        try {
+            
+            String query, querynull;
+            PreparedStatement statement;
+            
+            String qtitle = "title LIKE '%"+title+"%'";
+            String qauthor = "author LIKE '%"+author+"%'";
+            String qkeywords = "keywords LIKE '%"+keywords+"%'";   
+            
+            query = "select * from image where ";
+            querynull = "select * from image where ";
+            
+            if (!title.isEmpty()) query = query + qtitle;
+            if (!author.isEmpty()) query = query + qauthor;
+            if (!keywords.isEmpty()) query = query + qkeywords;
+            if (query.equals(querynull)) query = query + "'1' = '1'";
+            
+            statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            
+            ArrayList<String> filenames = new ArrayList<>();
+            
+            while (rs.next()) filenames.add(rs.getString("filename"));
+
+            
+            return filenames;
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
             
         } finally {
             // Se termina la conexión con la DB

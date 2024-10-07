@@ -14,7 +14,7 @@
     <body>
         <h1>Un error inesperado a ocurrido</h1>
         <li>
-            <a href="http://localhost:8080/practica2/menu.jsp">go to menu</a>
+            <a href="/practica2/menu.jsp">go to menu</a>
         </li>
     </body>
 </html>

@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 
-<% 
+<%
     HttpSession sesion = request.getSession(false);
     if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
 %>
@@ -20,7 +20,6 @@
     <body>
         <center>
             <h1>MENU</h1>
-            
             <a href="/practica2/registrarImagen.jsp">Registrar imagen</a>
             <br/>
             <a href="/practica2/buscarImagen.jsp">Buscar imagen</a>
