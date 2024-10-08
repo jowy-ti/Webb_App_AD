@@ -8,7 +8,8 @@
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
-    <!--
-    <property name="alternatedocroot_1" value="from=/Imágenes/* dir=/home/alumne" />
-    -->
+    <context-param>
+        <param-name>upload.location</param-name>
+        <param-value>/home/alumne/Imágenes</param-value>
+    </context-param>
 </web-app>
