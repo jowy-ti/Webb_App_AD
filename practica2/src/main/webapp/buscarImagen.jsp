@@ -31,6 +31,10 @@
                 <input type="text" id="keywords" name="keywords" />
                 
                 <button type="submit">Search</button>
+                
+                <br>
+                
+                <img src="BuscarImagen" alt="tucan">
             </ul>
         </form>
     </body>

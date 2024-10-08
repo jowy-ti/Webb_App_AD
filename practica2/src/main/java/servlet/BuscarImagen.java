@@ -33,8 +33,8 @@ public class BuscarImagen extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
+        response.setContentType("image/jpg");
         try {
             HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
@@ -45,33 +45,23 @@ public class BuscarImagen extends HttpServlet {
             
             ArrayList<String> filenames = QueryDB.search_image(title, author, keywords);
             
-            if (filenames == null) ;//error
-            else if (filenames.isEmpty()) ;//error
+            if (filenames == null)  return;//error
+            else if (filenames.isEmpty()) return;//error
             
-            else {
-                String path = "/home/alumne/Imágenes/";
 
-                for (int i = 0; i < filenames.size(); ++i) {
-                    try {
-                        File imageFile = new File(path+filenames.get(i));
-                        OutputStream out = response.getOutputStream();
-                        
-                        response.setContentType("image/jpg");
-                        response.setContentLength((int) imageFile.length());
-                        
-                        FileInputStream fis = new FileInputStream(imageFile);
-                        OutputStream os = response.getOutputStream();
+            final String path = "/home/alumne/Imágenes/";
+            File imageFile;
+            FileInputStream fis;
+            OutputStream os = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            
+            for (int i = 0; i < filenames.size(); ++i) {
+
+                imageFile = new File(path+filenames.get(i));
+                response.setContentLength((int) imageFile.length());      
+                fis = new FileInputStream(imageFile);
                             
-                        byte[] buffer = new byte[1024];
-                        int bytesRead;
-                        while ((bytesRead = fis.read(buffer)) != -1) {
-                            os.write(buffer, 0, bytesRead);
-                        }
-                        
-                    } catch (IOException e) {
-                            System.err.println(e.getMessage());
-                    }
-                }
+                while (fis.read(buffer) != -1) os.write(buffer);
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
