@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+/home/alumne/ad/ad/practica2/src/main/java/testDB/TestDB.java
+/home/alumne/ad/ad/practica2/src/main/java/servlet/RegistrarImagen.java
+/home/alumne/ad/ad/practica2/src/main/java/DB/ConnectionDB.java
+/home/alumne/ad/ad/practica2/src/main/java/DB/QueryDB.java
+/home/alumne/ad/ad/practica2/src/main/java/DB/UpdateDB.java
+/home/alumne/ad/ad/practica2/src/main/java/servlet/Login.java
+/home/alumne/ad/ad/practica2/src/main/java/servlet/Register.java
+/home/alumne/ad/ad/practica2/src/main/java/test/practica2/resources/JakartaEE91Resource.java
+/home/alumne/ad/ad/practica2/src/main/java/Err/Errors.java
+/home/alumne/ad/ad/practica2/src/main/java/test/practica2/JakartaRestConfiguration.java
+=======
 /home/alumne/NetBeansProjects/ad/practica2/src/main/java/DB/UpdateDB.java
 /home/alumne/NetBeansProjects/ad/practica2/src/main/java/servlet/BuscarImagen.java
 /home/alumne/NetBeansProjects/ad/practica2/src/main/java/servlet/RegistrarImagen.java
@@ -9,3 +21,4 @@
 /home/alumne/NetBeansProjects/ad/practica2/src/main/java/testDB/TestDB.java
 /home/alumne/NetBeansProjects/ad/practica2/src/main/java/servlet/Register.java
 /home/alumne/NetBeansProjects/ad/practica2/src/main/java/test/practica2/JakartaRestConfiguration.java
+>>>>>>> 30b5fc69f19678c25770fd9d0a8be70583277cda

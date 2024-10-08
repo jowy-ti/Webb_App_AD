@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import DB.ConnectionDB;
+import java.time.LocalDate;
 
 /**
  *
@@ -62,23 +63,22 @@ public class UpdateDB {
             
             String query;
             PreparedStatement statement;
-            //Obtenemos el id a asignar
-            query = "SELECT * FROM image WHERE image.id = ( SELECT MAX(image.id) FROM image)";
-            int id = Integer.parseInt(query) + 1;
-            String storage_date = "27/09/2024"; //ESTA MAL, VALOR DE PRUEBA
+            //Obtenemos la data de almacenamiento, que es la actual
+            LocalDate date = LocalDate.now();
+            String storage_date = date.toString();
             
             // Actualizamos la DB con una nueva imagen
-            query = "insert into images values(?,?,?,?,?,?,?,?)";
+            query = "insert into image (TITLE,DESCRIPTION,KEYWORDS,AUTHOR,CREATOR,CAPTURE_DATE,STORAGE_DATE,FILENAME)"
+                    + "values (?,?,?,?,?,?,?,?)";
             statement = connection.prepareStatement(query);    
-            statement.setInt(1, id);
-            statement.setString(2, title);
-            statement.setString(3, descr);
-            statement.setString(4, key_words);
-            statement.setString(5, author);
-            statement.setString(6, creator);
-            statement.setString(7, cap_date);
-            statement.setString(8, storage_date);
-            statement.setString(9, filename);
+            statement.setString(1, title);
+            statement.setString(2, descr);
+            statement.setString(3, key_words);
+            statement.setString(4, author);
+            statement.setString(5, creator);
+            statement.setString(6, cap_date);
+            statement.setString(7, storage_date);
+            statement.setString(8, filename);
             statement.executeUpdate();
                                  
         } catch (SQLException e) {
