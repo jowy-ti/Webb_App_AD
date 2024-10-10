@@ -40,8 +40,8 @@
             <c:forEach var="imagen" items="${filenames}">
                 <img src="uploads/${imagen}" alt="${imagen}" style="width:500px;height:300px;"></li>
                 <c:if test="${session_images.contains(imagen)}">
-                    <a href="/practica2/login.jsp">Eliminar</a>
-                    <a href="/practica2/login.jsp">Modificar</a>
+                    <a href="/practica2/eliminarImagen.jsp">Eliminar</a>
+                    <a href="/practica2/modificarImagen.jsp">Modificar</a>
                 </c:if>
                 <br> <br> <br>
             </c:forEach>

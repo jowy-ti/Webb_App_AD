@@ -50,7 +50,7 @@ public class eliminarImagen extends HttpServlet {
             String keywords = request.getParameter("keywords");
             
             UpdateDB.delete_image(filename, title, keywords);
-            String path = "/home/alumne/Imágenes/";
+            String path = "/var/webapp/uploads";
             File archivo = new File(path);
             boolean deleted = archivo.delete();
             if (deleted == false) {
