@@ -33,14 +33,7 @@
                 <button type="submit">Search</button>
                 
                 <br>
-                
-                <%
-        // Obtener la ubicación de carga del contexto
-        String uploadLocation = application.getInitParameter("upload.location");
-        // Suponiendo que tienes una imagen llamada "tucan.jpg" en esa ubicación
-        String imagePath = uploadLocation + "/tucan.jpg"; 
-                %>
-            <img src= "<%= imagePath %>" alt="Tucán" />
+                <img src="uploads/tucan.jpg" alt="tucan" />
             </ul>
         </form>
     </body>

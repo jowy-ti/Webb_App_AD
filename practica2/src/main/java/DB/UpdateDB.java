@@ -105,7 +105,8 @@ public class UpdateDB {
             statement.setString(1, title);
             statement.setString(2, filename);
             statement.executeUpdate();
-                                 
+                               
+            
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return -1;
@@ -116,5 +117,36 @@ public class UpdateDB {
         }
         return 0;
     }
+    
+    static public int update_image(String title, String descr, String key_words,
+            String author, String cap_date, String filename, int id) {
+         // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
 
+        try {
+            
+            String query;
+            PreparedStatement statement;
+           
+            query = "UPDATE imagenes SET title = ?, description = ?, keywords = ?, author = ?, capture_date = ?, filename = ? WHERE id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, title);
+            statement.setString(2, descr);
+            statement.setString(3, key_words);
+            statement.setString(4, author);
+            statement.setString(5, cap_date);
+            statement.setString(6, filename);
+            statement.executeUpdate();
+                               
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return -1;
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
+        return 0;
+    }
 }

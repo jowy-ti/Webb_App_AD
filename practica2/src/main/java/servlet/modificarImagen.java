@@ -26,8 +26,8 @@ import java.util.ArrayList;
  *
  * @author alumne
  */
-@WebServlet(name = "eliminarImagen", urlPatterns = {"/eliminarImagen"})
-public class eliminarImagen extends HttpServlet {
+@WebServlet(name = "modificarImagen", urlPatterns = {"/modificarImagen"})
+public class modificarImagen extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -40,25 +40,20 @@ public class eliminarImagen extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         try {
-            HttpSession sesion = request.getSession(false);
-            if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
             
             String title = request.getParameter("title");
+            String descr = request.getParameter("description");
+            String key_words = request.getParameter("keywords");
+            String author = request.getParameter("author");
+            String cap_date = request.getParameter("capture_date");
             String filename = request.getParameter("filename");
-            String keywords = request.getParameter("keywords");
+            int id = QueryDB.get_image_id(title, descr, key_words, author, cap_date, filename);
             
-            UpdateDB.delete_image(filename, title, keywords);
-            String path = "/home/alumne/Imágenes/";
-            File archivo = new File(path);
-            boolean deleted = archivo.delete();
-            if (deleted == false) {
-                //redirigir a pantalla de error
-                 response.sendRedirect("error.jsp");
-            }
+            if (id > 0) response.sendRedirect("error.jsp");
+            else UpdateDB.update_image(title, descr, key_words, author, cap_date, filename, id);
             
-        } catch(Exception e) {
+        } catch (Exception e) {
             
         }
     }
