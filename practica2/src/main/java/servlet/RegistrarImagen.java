@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import jakarta.servlet.http.Part;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.logging.*;
 
 /**
@@ -78,8 +79,9 @@ public class RegistrarImagen extends HttpServlet {
                 //Tratamos error mismo filename ya existe
             }*/
             
+            
         // Create path components to save the file
-        final String path = "/home/alumne/Imágenes";
+        final String path = "/var/webapp/uploads";
         final Part filePart = request.getPart("file");
         final String fileName = getFileName(filePart);
 
@@ -120,8 +122,16 @@ public class RegistrarImagen extends HttpServlet {
                 writer.close();
             }
         }
+        
+        // Añadimos el atributo filename a la sesión
+        String files_sesion = "session_images";
+        ArrayList<String> filenames = (ArrayList<String>)sesion.getAttribute(files_sesion);
+        if (filenames == null) filenames = new ArrayList<>();
             
-        UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
+        filenames.add(fileName);
+        sesion.setAttribute(files_sesion, filenames);
+            
+        UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, fileName);
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

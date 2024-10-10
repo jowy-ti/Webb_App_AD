@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import DB.QueryDB;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  *
@@ -34,7 +37,8 @@ public class BuscarImagen extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setContentType("image/jpg");
+        response.setContentType("text/html;charset=UTF-8");
+        
         try {
             HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
@@ -45,24 +49,20 @@ public class BuscarImagen extends HttpServlet {
             
             ArrayList<String> filenames = QueryDB.search_image(title, author, keywords);
             
-            if (filenames == null)  return;//error
-            else if (filenames.isEmpty()) return;//error
+            if (filenames == null)  {
+                response.sendRedirect("/practica2/buscarImagen.jsp");
+                return;
+            }//error
+            else if (filenames.isEmpty()) {
+                response.sendRedirect("/practica2/buscarImagen.jsp");
+                return;
+            }//error
             
-
-            final String path = "/home/alumne/Imágenes/";
-            File imageFile;
-            FileInputStream fis;
-            OutputStream os = response.getOutputStream();
-            byte[] buffer = new byte[1024];
+            request.setAttribute("filenames", filenames);
             
-            for (int i = 0; i < filenames.size(); ++i) {
-
-                imageFile = new File(path+filenames.get(i));
-                response.setContentLength((int) imageFile.length());      
-                fis = new FileInputStream(imageFile);
-                            
-                while (fis.read(buffer) != -1) os.write(buffer);
-            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/buscarImagen.jsp");
+            dispatcher.forward(request, response);
+            
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

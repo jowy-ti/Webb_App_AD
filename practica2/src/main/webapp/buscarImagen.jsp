@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <% 
     HttpSession sesion = request.getSession(false);
@@ -33,8 +34,16 @@
                 <button type="submit">Search</button>
                 
                 <br>
-                <img src="uploads/tucan.jpg" alt="tucan" />
             </ul>
         </form>
+        <c:set var="session_images" value="${sessionScope.session_images}" />
+            <c:forEach var="imagen" items="${filenames}">
+                <img src="uploads/${imagen}" alt="${imagen}" style="width:500px;height:300px;"></li>
+                <c:if test="${session_images.contains(imagen)}">
+                    <a href="/practica2/login.jsp">Eliminar</a>
+                    <a href="/practica2/login.jsp">Modificar</a>
+                </c:if>
+                <br> <br> <br>
+            </c:forEach>
     </body>
 </html>
