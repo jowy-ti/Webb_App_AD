@@ -91,5 +91,30 @@ public class UpdateDB {
         }
         return 0;
     }
+    
+    static public int delete_image(String filename, String title, String keywords) {
+         // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
+
+        try {
+            
+            String query;
+            PreparedStatement statement;
+            query = "DELETE FROM image WHERE title = ? && filename = ?";
+            statement = connection.prepareStatement(query); 
+            statement.setString(1, title);
+            statement.setString(2, filename);
+            statement.executeUpdate();
+                                 
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return -1;
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
+        return 0;
+    }
 
 }
