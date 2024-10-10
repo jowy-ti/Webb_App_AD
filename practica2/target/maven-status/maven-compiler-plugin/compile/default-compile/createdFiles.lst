@@ -1,13 +1,7 @@
 DB/ConnectionDB.class
 test/practica2/resources/JakartaEE91Resource.class
 servlet/Register.class
-<<<<<<< HEAD
-test/practica2/JakartaRestConfiguration.class
 servlet/RegistrarImagen.class
-DB/UpdateDB.class
-=======
-servlet/RegistrarImagen.class
->>>>>>> 30b5fc69f19678c25770fd9d0a8be70583277cda
 test/TestDB.class
 servlet/Login.class
 servlet/BuscarImagen.class
