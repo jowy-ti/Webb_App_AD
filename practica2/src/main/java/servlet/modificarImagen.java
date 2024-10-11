@@ -28,7 +28,9 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "modificarImagen", urlPatterns = {"/modificarImagen"})
 public class modificarImagen extends HttpServlet {
-
+    
+    int id;
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -48,12 +50,22 @@ public class modificarImagen extends HttpServlet {
             String author = request.getParameter("author");
             String cap_date = request.getParameter("capture_date");
             String filename = request.getParameter("filename");
-            
-            int id = Integer.parseInt(request.getParameter("id")); //Obtener el id de la imagen
             if (id > 0) response.sendRedirect("error.jsp");
             else UpdateDB.update_image(title, descr, key_words, author, cap_date, filename, id);
             
         } catch (IOException e) {
+            
+        }
+    }
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HttpSession sesion = request.getSession(false);
+            if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
+
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (Exception e) {
             
         }
     }

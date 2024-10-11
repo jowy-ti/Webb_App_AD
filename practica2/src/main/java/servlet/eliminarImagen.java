@@ -28,7 +28,11 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "eliminarImagen", urlPatterns = {"/eliminarImagen"})
 public class eliminarImagen extends HttpServlet {
-
+    
+    
+    int id;
+    String fileName;
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -45,10 +49,8 @@ public class eliminarImagen extends HttpServlet {
             HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
             
-            int id = Integer.parseInt(request.getParameter("id"));
+           
             UpdateDB.delete_image(id);
-     
-            String fileName = request.getParameter("filename");
             String path = "/var/webapp/uploads";
             File file = new File(path+"/"+fileName);
             boolean deleted = file.delete();
@@ -58,6 +60,19 @@ public class eliminarImagen extends HttpServlet {
             }
             
         } catch(IOException e) {
+            
+        }
+    }
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HttpSession sesion = request.getSession(false);
+            if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
+
+            id = Integer.parseInt(request.getParameter("id"));
+            fileName = request.getParameter("filename");
+        } catch (Exception e) {
             
         }
     }
