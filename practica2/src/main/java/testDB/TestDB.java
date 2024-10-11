@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package test;
+package testDB;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,7 +70,7 @@ public class TestDB extends HttpServlet {
             // Se termina la conexión con la DB
             ConnectionDB.disconnectDB(connection);
         }
-        response.sendRedirect("http://localhost:8080/practica2/login.jsp");
+        response.sendRedirect("login.jsp");
     }
     
     @Override

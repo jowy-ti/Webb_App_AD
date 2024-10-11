@@ -10,7 +10,7 @@
 
 <% 
     HttpSession sesion = request.getSession(false);
-    if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+    if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
 %>
 <!DOCTYPE html>
 <html>

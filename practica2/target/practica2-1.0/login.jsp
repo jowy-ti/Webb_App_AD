@@ -23,11 +23,8 @@
                 <input type="text" id="password" name="password" />
                 
                 <button type="submit">Entrar</button>
-                
-                <li>
-                <a href="/practica2/register.jsp">Registrar</a>
-                </li>
             </ul>
         </form>
+        <a href="register.jsp">Registrar</a>
     </body>
 </html>

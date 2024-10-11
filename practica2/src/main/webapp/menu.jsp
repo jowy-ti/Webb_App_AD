@@ -9,7 +9,7 @@
 
 <%
     HttpSession sesion = request.getSession(false);
-    if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+    if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
 %>
 <!DOCTYPE html>
 <html>
@@ -20,9 +20,9 @@
     <body>
         <center>
             <h1>MENU</h1>
-            <a href="/practica2/registrarImagen.jsp">Registrar imagen</a>
+            <a href="registrarImagen.jsp">Registrar imagen</a>
             <br/>
-            <a href="/practica2/buscarImagen.jsp">Buscar imagen</a>
+            <a href="buscarImagen.jsp">Buscar imagen</a>
         </center>
     </body>
 </html>

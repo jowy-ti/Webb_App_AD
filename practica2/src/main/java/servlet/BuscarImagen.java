@@ -50,11 +50,11 @@ public class BuscarImagen extends HttpServlet {
             
 
             if (images == null)  {
-                response.sendRedirect("/practica2/buscarImagen.jsp");
+                response.sendRedirect("buscarImagen.jsp");
                 return;
             }//error
             else if (images.isEmpty()) {
-                response.sendRedirect("/practica2/buscarImagen.jsp");
+                response.sendRedirect("buscarImagen.jsp");
                 return;
             }//error
             
