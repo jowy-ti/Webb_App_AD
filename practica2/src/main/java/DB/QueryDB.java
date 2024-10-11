@@ -54,7 +54,7 @@ public class QueryDB {
         }
     }
     
-    static public ArrayList<String> search_image(String title, String author, String keywords) {
+    static public ArrayList<ArrayList<String>> search_image(String title, String author, String keywords) {
         
         // Se crea una conexión con la DB y se comprueba que ha salido bien
         Connection connection = ConnectionDB.connectDB();
@@ -79,12 +79,20 @@ public class QueryDB {
             statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
             
-            ArrayList<String> filenames = new ArrayList<>();
-            
-            while (rs.next()) filenames.add(rs.getString("filename"));
+            ArrayList<ArrayList<String>> images = new ArrayList<>();
+            ArrayList<String> info;
 
-            
-            return filenames;
+            while (rs.next()) {
+                info = new ArrayList<>();
+                info.add(rs.getString("title"));
+                info.add(rs.getString("description"));
+                info.add(rs.getString("author"));
+                info.add(rs.getString("filename"));
+                info.add(rs.getString("id"));
+                images.add(info);
+            }
+
+            return images;
             
         } catch (SQLException e) {
             System.err.println(e.getMessage());
