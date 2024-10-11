@@ -67,19 +67,14 @@ public class RegistrarImagen extends HttpServlet {
             String author = request.getParameter("author");
             String creator = sesion.getAttribute("user").toString();
             String cap_date = request.getParameter("capture_date");
-            String filename = request.getParameter("filename");
             
             //Comprovamos si algun parametro es nulo
             if (title.equals("") || descr.equals("") ||
                     key_words.equals("") ||author.equals("") ||
-                    cap_date.equals("") ||filename.equals("")) {
+                    cap_date.equals("")) {
                 //Tratamos error
             }
-            /*if (filename.equals(QueryDB.exists_filename(filename))) {
-                //Tratamos error mismo filename ya existe
-            }*/
-            
-            
+             
         // Create path components to save the file
         final String path = "/var/webapp/uploads";
         final Part filePart = request.getPart("file");
@@ -103,6 +98,8 @@ public class RegistrarImagen extends HttpServlet {
             writer.println("New file " + fileName + " created at " + path);
             LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
                     new Object[]{fileName, path});
+            
+            
         } catch (FileNotFoundException fne) {
             writer.println("You either did not specify a file to upload or are "
                     + "trying to upload a file to a protected or nonexistent "
@@ -111,6 +108,7 @@ public class RegistrarImagen extends HttpServlet {
 
             LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
                     new Object[]{fne.getMessage()});
+            
         } finally {
             if (out != null) {
                 out.close();

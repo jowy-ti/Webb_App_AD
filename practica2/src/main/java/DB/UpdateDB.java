@@ -92,7 +92,7 @@ public class UpdateDB {
         return 0;
     }
     
-    static public int delete_image(String filename, String title, String keywords) {
+    static public int delete_image(int id) {
          // Se crea una conexión con la DB y se comprueba que ha salido bien
         Connection connection = ConnectionDB.connectDB();
 
@@ -100,10 +100,9 @@ public class UpdateDB {
             
             String query;
             PreparedStatement statement;
-            query = "DELETE FROM image WHERE title = ? && filename = ?";
+            query = "DELETE FROM image WHERE id = ?";
             statement = connection.prepareStatement(query); 
-            statement.setString(1, title);
-            statement.setString(2, filename);
+            statement.setInt(1, id);
             statement.executeUpdate();
                                
             
@@ -127,15 +126,59 @@ public class UpdateDB {
             
             String query;
             PreparedStatement statement;
+            int index = 1;
            
-            query = "UPDATE imagenes SET title = ?, description = ?, keywords = ?, author = ?, capture_date = ?, filename = ? WHERE id = ?";
+            query = "UPDATE imagenes SET ";
+            String qtitle = "title = ?";
+            String qdescr = "description = ?";
+            String qkeywords = "keywords = ?"; 
+            String qauthor = "author = ?";
+            String qcapdate = "capture_date = ?";
+            String qfilename = "filename = ?";
             statement = connection.prepareStatement(query);
-            statement.setString(1, title);
-            statement.setString(2, descr);
-            statement.setString(3, key_words);
-            statement.setString(4, author);
-            statement.setString(5, cap_date);
-            statement.setString(6, filename);
+            
+            if (!title.isEmpty()) {
+                query = query + qtitle;
+                if (!descr.isEmpty() && !key_words.isEmpty() && !author.isEmpty()
+                        && cap_date.isEmpty() && filename.isEmpty()) query += ", ";
+                statement.setString(index, title);
+                ++index;
+            }
+            if (!descr.isEmpty()) {
+                query = query + qdescr;
+                if (!key_words.isEmpty() && !author.isEmpty()
+                        && cap_date.isEmpty() && filename.isEmpty()) query += ", ";
+                statement.setString(index, descr);
+                ++index;
+            }
+            if (!key_words.isEmpty()) {
+                query = query + qkeywords;
+                if (!author.isEmpty() && cap_date.isEmpty() 
+                        && filename.isEmpty()) query += ", ";
+                statement.setString(index, key_words);
+                ++index;
+            }
+            if (!author.isEmpty()) {
+                query = query + qauthor;
+                if (cap_date.isEmpty() && filename.isEmpty()) query += ", ";
+                statement.setString(index, author);
+                ++index;
+            }
+            if (!cap_date.isEmpty()) {
+                query = query + qcapdate;
+                if (filename.isEmpty()) query += ", ";
+                statement.setString(index, cap_date);
+                ++index;
+            }
+            if (!filename.isEmpty()) {
+                query = query + qfilename;
+                statement.setString(index, filename);
+                ++index;
+            }
+            
+            query = query + " WHERE id = ?";
+            statement.setInt(index, id);
+            statement = connection.prepareStatement(query);
             statement.executeUpdate();
                                
             

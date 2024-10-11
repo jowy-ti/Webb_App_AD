@@ -41,13 +41,14 @@ public class BuscarImagen extends HttpServlet {
         
         try {
             HttpSession sesion = request.getSession(false);
-            if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+            if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
             
             String title = request.getParameter("title");
             String author = request.getParameter("author");
             String keywords = request.getParameter("keywords");
             ArrayList<ArrayList<String>> images = QueryDB.search_image(title, author, keywords);
             
+
             if (images == null)  {
                 response.sendRedirect("/practica2/buscarImagen.jsp");
                 return;
