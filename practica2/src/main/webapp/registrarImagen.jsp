@@ -34,11 +34,8 @@
             <label for="author">Autor:</label>
             <input type="text" id="author" name="author" />
             <br/>
-            <label for="capture_date">Fecha de Creación:</label>
+            <label for="capture_date">Fecha de Captura:</label>
             <input type="text" id="capture_date" name="capture_date" />
-            <br/>
-            <label for="filename">Nombre de Fichero:</label>
-            <input type="text" id="filename" name="filename" />
             <br/>
             Seleccione la imagen:
             <input type="file" name="file">

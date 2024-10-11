@@ -41,7 +41,7 @@ public class BuscarImagen extends HttpServlet {
         
         try {
             HttpSession sesion = request.getSession(false);
-            if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+            if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
             
             String title = request.getParameter("title");
             String author = request.getParameter("author");
@@ -50,11 +50,11 @@ public class BuscarImagen extends HttpServlet {
             ArrayList<String> filenames = QueryDB.search_image(title, author, keywords);
             
             if (filenames == null)  {
-                response.sendRedirect("/practica2/buscarImagen.jsp");
+                response.sendRedirect("buscarImagen.jsp");
                 return;
             }//error
             else if (filenames.isEmpty()) {
-                response.sendRedirect("/practica2/buscarImagen.jsp");
+                response.sendRedirect("buscarImagen.jsp");
                 return;
             }//error
             

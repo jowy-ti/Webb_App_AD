@@ -41,19 +41,19 @@ public class modificarImagen extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            
+             //Estos son los nuevos valores, si es null no se actualiza el valor antiguo
             String title = request.getParameter("title");
             String descr = request.getParameter("description");
             String key_words = request.getParameter("keywords");
             String author = request.getParameter("author");
             String cap_date = request.getParameter("capture_date");
             String filename = request.getParameter("filename");
-            int id = QueryDB.get_image_id(title, descr, key_words, author, cap_date, filename);
             
+            int id = Integer.parseInt(request.getParameter("id")); //Obtener el id de la imagen
             if (id > 0) response.sendRedirect("error.jsp");
             else UpdateDB.update_image(title, descr, key_words, author, cap_date, filename, id);
             
-        } catch (Exception e) {
+        } catch (IOException e) {
             
         }
     }

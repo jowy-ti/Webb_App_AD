@@ -20,9 +20,10 @@
     </head>
     <body>
         <h1>Eliminar Imagen</h1>
-        <form action = "eliminarImagen" method = "POST" enctype="multipart/form-data">
-            
-           
+        <form action = "eliminarImagen" method = "POST">
+            <img src="uploads/${imagen}" alt="${imagen}" style="width:300px;height:150px;">
+            <br/>
+            Esta seguro que esta es la imagen que quiere eliminar?
             <br/>
             <button type="submit">Eliminar</button>
         </form>

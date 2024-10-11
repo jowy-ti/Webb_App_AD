@@ -43,22 +43,21 @@ public class eliminarImagen extends HttpServlet {
         
         try {
             HttpSession sesion = request.getSession(false);
-            if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+            if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
             
-            String title = request.getParameter("title");
-            String filename = request.getParameter("filename");
-            String keywords = request.getParameter("keywords");
-            
-            UpdateDB.delete_image(filename, title, keywords);
+            int id = Integer.parseInt(request.getParameter("id"));
+            UpdateDB.delete_image(id);
+     
+            String fileName = request.getParameter("filename");
             String path = "/var/webapp/uploads";
-            File archivo = new File(path);
-            boolean deleted = archivo.delete();
+            File file = new File(path+"/"+fileName);
+            boolean deleted = file.delete();
             if (deleted == false) {
                 //redirigir a pantalla de error
                  response.sendRedirect("error.jsp");
             }
             
-        } catch(Exception e) {
+        } catch(IOException e) {
             
         }
     }

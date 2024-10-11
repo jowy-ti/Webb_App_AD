@@ -96,6 +96,7 @@ public class QueryDB {
         }
     }
     
+    /*
     static public int get_image_id(String title, String descr, String key_words,
             String author, String cap_date, String filename) {
         // Se crea una conexión con la DB y se comprueba que ha salido bien
@@ -131,4 +132,5 @@ public class QueryDB {
             ConnectionDB.disconnectDB(connection);
         }
     }
+    */
 }
