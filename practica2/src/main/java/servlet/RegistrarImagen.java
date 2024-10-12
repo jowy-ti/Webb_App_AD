@@ -75,61 +75,70 @@ public class RegistrarImagen extends HttpServlet {
                 //Tratamos error
             }
              
-        // Create path components to save the file
-        final String path = "/var/webapp/uploads";
-        final Part filePart = request.getPart("file");
-        final String fileName = getFileName(filePart);
-
-        OutputStream out = null;
-        InputStream filecontent = null;
-        final PrintWriter writer = response.getWriter();
-
-        try {
-            out = new FileOutputStream(new File(path + File.separator
-                    + fileName));
-            filecontent = filePart.getInputStream();
-
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-
-            while ((read = filecontent.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            writer.println("New file " + fileName + " created at " + path);
-            LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
-                    new Object[]{fileName, path});
+            // Create path components to save the file
+            final String path = "/var/webapp/uploads";
+            final Part filePart = request.getPart("file");
+            final String fileName = getFileName(filePart);
             
-            
-        } catch (FileNotFoundException fne) {
-            writer.println("You either did not specify a file to upload or are "
-                    + "trying to upload a file to a protected or nonexistent "
-                    + "location.");
-            writer.println("<br/> ERROR: " + fne.getMessage());
+            //Comprovamos que no exista una imagen con el mismo nombre
+            //Se debería enviar a página de error
+            if (QueryDB.exists_image(fileName) == 0) {
+                response.sendRedirect("error_out.jsp");
+                return; //Paramos la ejecucion antes de añadir la imagen
+            }
 
-            LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                    new Object[]{fne.getMessage()});
-            
-        } finally {
-            if (out != null) {
-                out.close();
+            OutputStream out = null;
+            InputStream filecontent = null;
+            final PrintWriter writer = response.getWriter();
+
+            try {
+                out = new FileOutputStream(new File(path + File.separator
+                        + fileName));
+                filecontent = filePart.getInputStream();
+
+                int read = 0;
+                final byte[] bytes = new byte[1024];
+
+                while ((read = filecontent.read(bytes)) != -1) {
+                    out.write(bytes, 0, read);
+                }
+                writer.println("New file " + fileName + " created at " + path);
+                LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
+                        new Object[]{fileName, path});
+
+
+            } catch (FileNotFoundException fne) {
+                writer.println("You either did not specify a file to upload or are "
+                        + "trying to upload a file to a protected or nonexistent "
+                        + "location.");
+                writer.println("<br/> ERROR: " + fne.getMessage());
+
+                LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                        new Object[]{fne.getMessage()});
+
+            } finally {
+                if (out != null) {
+                    out.close();
+                }
+                if (filecontent != null) {
+                    filecontent.close();
+                }
+                if (writer != null) {
+                    writer.close();
+                }
             }
-            if (filecontent != null) {
-                filecontent.close();
-            }
-            if (writer != null) {
-                writer.close();
-            }
-        }
         
-        // Añadimos el atributo filename a la sesión
-        String files_sesion = "session_images";
-        ArrayList<String> filenames = (ArrayList<String>)sesion.getAttribute(files_sesion);
-        if (filenames == null) filenames = new ArrayList<>();
-            
-        filenames.add(fileName);
-        sesion.setAttribute(files_sesion, filenames);
-            
-        UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, fileName);
+            // Añadimos el atributo filename a la sesión
+            String files_sesion = "session_images";
+            ArrayList<String> filenames = (ArrayList<String>)sesion.getAttribute(files_sesion);
+            if (filenames == null) filenames = new ArrayList<>();
+
+            filenames.add(fileName);
+            sesion.setAttribute(files_sesion, filenames);
+
+            UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, fileName);
+            //todo ha ido bien
+            response.sendRedirect("menu.jsp");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

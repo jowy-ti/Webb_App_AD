@@ -20,7 +20,7 @@
                 <input type="text" id="id_usuario" name="id_usuario" />
                 
                 <label for="password">Contraseña:</label>
-                <input type="text" id="password" name="password" />
+                <input type="password" id="password" name="password" />
                 
                 <button type="submit">Entrar</button>
             </ul>

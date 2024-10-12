@@ -104,9 +104,8 @@ public class QueryDB {
         }
     }
     
-    /*
-    static public int get_image_id(String title, String descr, String key_words,
-            String author, String cap_date, String filename) {
+    static public int exists_image(String filename){
+        
         // Se crea una conexión con la DB y se comprueba que ha salido bien
         Connection connection = ConnectionDB.connectDB();
         
@@ -114,22 +113,13 @@ public class QueryDB {
             
             String query;
             PreparedStatement statement;
-            
-            query = "SELECT id FROM image WHERE title = ? AND descr = ? AND key_words = ? AND author = ? AND cap_date = ? AND filename = ?";
+            query = "select filename from image where filename = '"+filename+"'";
             statement = connection.prepareStatement(query);
-            statement.setString(1, title);
-            statement.setString(2, descr);
-            statement.setString(3, key_words);
-            statement.setString(4, author);
-            statement.setString(5, cap_date);
-            statement.setString(6, filename);
-            ResultSet rs = statement.executeQuery();
+            ResultSet rs = statement.executeQuery(); 
             
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                return id;
-            }
-            return -2; //rs vacio, no se ha encontrado la imagen
+            if (rs.next()) return 0; //Imagen con ese nombre existe
+            
+            return 1; 
             
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -140,6 +130,5 @@ public class QueryDB {
             ConnectionDB.disconnectDB(connection);
         }
     }
-    */
     
 }

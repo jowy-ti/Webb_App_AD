@@ -56,8 +56,10 @@ public class eliminarImagen extends HttpServlet {
             boolean deleted = file.delete();
             if (deleted == false) {
                 //redirigir a pantalla de error
-                 response.sendRedirect("error.jsp");
+                System.out.println ("El error es aqui");
+                response.sendRedirect("error_out.jsp");
             }
+            else response.sendRedirect("buscarImagen.jsp");
             
         } catch(IOException e) {
             
@@ -72,6 +74,7 @@ public class eliminarImagen extends HttpServlet {
 
             id = Integer.parseInt(request.getParameter("id"));
             fileName = request.getParameter("filename");
+            response.sendRedirect("eliminarImagen.jsp");
         } catch (Exception e) {
             
         }

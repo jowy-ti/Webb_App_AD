@@ -50,8 +50,10 @@ public class modificarImagen extends HttpServlet {
             String author = request.getParameter("author");
             String cap_date = request.getParameter("capture_date");
             String filename = request.getParameter("filename");
-            if (id > 0) response.sendRedirect("error.jsp");
+            
+            if (id < 0) response.sendRedirect("error_out.jsp");
             else UpdateDB.update_image(title, descr, key_words, author, cap_date, filename, id);
+            response.sendRedirect("buscarImagen.jsp");
             
         } catch (IOException e) {
             
@@ -65,6 +67,7 @@ public class modificarImagen extends HttpServlet {
             if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
 
             id = Integer.parseInt(request.getParameter("id"));
+            response.sendRedirect("modificarImagen.jsp");
         } catch (Exception e) {
             
         }

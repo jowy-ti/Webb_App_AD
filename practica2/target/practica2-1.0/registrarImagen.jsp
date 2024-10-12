@@ -41,6 +41,9 @@
             <input type="file" name="file">
             <br/>
             <button type="submit">Registrar</button>
+            <br/>
+            <br/>
+            <a href="menu.jsp">Return</a>
         </form>
     </body>
 </html>

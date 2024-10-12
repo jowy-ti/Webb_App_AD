@@ -34,7 +34,11 @@
                 <button type="submit">Search</button>
                 
                 <br>
+                
             </ul>
+            <br/>
+            <br/>
+            <a href="menu.jsp">Return</a>
         </form>
         <c:set var="session_images" value="${sessionScope.session_images}" />
             <c:forEach var="imagen" items="${images}">
@@ -50,7 +54,7 @@
                             <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
                             <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
                     </form>
-                    <form action="eliminarImagen" method="GET">
+                    <form action="modificarImagen" method="GET">
                             <button type="submit">Modificar</button>
                             <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
                     </form>

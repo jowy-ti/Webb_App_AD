@@ -39,6 +39,9 @@
             <input type="text" id="capture_date" name="capture_date" />
             <br/>
             <button type="submit">Modificar</button>
+            <br/>
+            <br/>
+            <a href="buscarImagen.jsp">Return</a>
         </form>
     </body>
 </html>
