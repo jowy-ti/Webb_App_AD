@@ -57,6 +57,7 @@
                     <form action="modificarImagen" method="GET">
                             <button type="submit">Modificar</button>
                             <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
+                            <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
                     </form>
                 </c:if>
                 <br> <br> <br>

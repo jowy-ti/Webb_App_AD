@@ -20,8 +20,9 @@
     </head>
     <body>
         <h1>Eliminar Imagen</h1>
+        <c:set var="filename" value="${request.getParameter("filename")}" />
         <form action = "eliminarImagen" method = "POST">
-            <img src="uploads/${imagen}" alt="${imagen}" style="width:300px;height:150px;">
+            <img src="uploads/${filename}" alt="${filename}" style="width:500px;height:300px;">
             <br/>
             Esta seguro que esta es la imagen que quiere eliminar?
             <br/>

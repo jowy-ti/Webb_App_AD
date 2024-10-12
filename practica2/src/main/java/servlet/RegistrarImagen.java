@@ -40,9 +40,6 @@ import java.util.logging.*;
 @MultipartConfig
 public class RegistrarImagen extends HttpServlet {
     
-    private final static Logger LOGGER =
-            Logger.getLogger(RegistrarImagen.class.getCanonicalName());
-    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -73,27 +70,28 @@ public class RegistrarImagen extends HttpServlet {
                     key_words.equals("") ||author.equals("") ||
                     cap_date.equals("")) {
                 //Tratamos error
+                response.sendRedirect("registrarImagen.jsp");
+                return;
             }
              
             // Create path components to save the file
             final String path = "/var/webapp/uploads";
             final Part filePart = request.getPart("file");
-            final String fileName = getFileName(filePart);
+            final String filename = getFileName(filePart);
             
             //Comprovamos que no exista una imagen con el mismo nombre
             //Se debería enviar a página de error
-            if (QueryDB.exists_image(fileName) == 0) {
+            if (QueryDB.exists_image(filename) == 0) {
                 response.sendRedirect("error_out.jsp");
                 return; //Paramos la ejecucion antes de añadir la imagen
             }
 
             OutputStream out = null;
             InputStream filecontent = null;
-            final PrintWriter writer = response.getWriter();
 
             try {
                 out = new FileOutputStream(new File(path + File.separator
-                        + fileName));
+                        + filename));
                 filecontent = filePart.getInputStream();
 
                 int read = 0;
@@ -102,19 +100,9 @@ public class RegistrarImagen extends HttpServlet {
                 while ((read = filecontent.read(bytes)) != -1) {
                     out.write(bytes, 0, read);
                 }
-                writer.println("New file " + fileName + " created at " + path);
-                LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
-                        new Object[]{fileName, path});
 
 
             } catch (FileNotFoundException fne) {
-                writer.println("You either did not specify a file to upload or are "
-                        + "trying to upload a file to a protected or nonexistent "
-                        + "location.");
-                writer.println("<br/> ERROR: " + fne.getMessage());
-
-                LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                        new Object[]{fne.getMessage()});
 
             } finally {
                 if (out != null) {
@@ -123,22 +111,14 @@ public class RegistrarImagen extends HttpServlet {
                 if (filecontent != null) {
                     filecontent.close();
                 }
-                if (writer != null) {
-                    writer.close();
-                }
             }
         
             // Añadimos el atributo filename a la sesión
-            String files_sesion = "session_images";
-            ArrayList<String> filenames = (ArrayList<String>)sesion.getAttribute(files_sesion);
-            if (filenames == null) filenames = new ArrayList<>();
+            Filename_in_session(filename, sesion);
 
-            filenames.add(fileName);
-            sesion.setAttribute(files_sesion, filenames);
-
-            UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, fileName);
+            UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
             //todo ha ido bien
-            response.sendRedirect("menu.jsp");
+            response.sendRedirect("registrarImagen.jsp");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -146,8 +126,7 @@ public class RegistrarImagen extends HttpServlet {
     }
     
     private String getFileName(final Part part) {
-        final String partHeader = part.getHeader("content-disposition");
-        LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);
+
         for (String content : part.getHeader("content-disposition").split(";")) {
             if (content.trim().startsWith("filename")) {
                 return content.substring(
@@ -155,6 +134,16 @@ public class RegistrarImagen extends HttpServlet {
             }
         }
         return null;
+    }
+    
+    private void Filename_in_session(String filename, HttpSession sesion) {
+        
+        String files_sesion = "session_images";
+        ArrayList<String> filenames = (ArrayList<String>)sesion.getAttribute(files_sesion);
+        if (filenames == null) filenames = new ArrayList<>();
+
+        filenames.add(filename);
+        sesion.setAttribute(files_sesion, filenames);
     }
 
     /**

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import DB.QueryDB;
 import DB.UpdateDB;
+import jakarta.servlet.RequestDispatcher;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,17 +50,17 @@ public class modificarImagen extends HttpServlet {
             String key_words = request.getParameter("keywords");
             String author = request.getParameter("author");
             String cap_date = request.getParameter("capture_date");
-            String filename = request.getParameter("filename");
             
             if (id < 0) response.sendRedirect("error_out.jsp");
-            else UpdateDB.update_image(title, descr, key_words, author, cap_date, filename, id);
+            else UpdateDB.update_image(title, descr, key_words, author, cap_date, id);
             response.sendRedirect("buscarImagen.jsp");
             
         } catch (IOException e) {
-            
+            System.err.println(e.getMessage());
         }
     }
     
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -67,9 +68,14 @@ public class modificarImagen extends HttpServlet {
             if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
 
             id = Integer.parseInt(request.getParameter("id"));
-            response.sendRedirect("modificarImagen.jsp");
-        } catch (Exception e) {
+            String filename = request.getParameter("filename");
             
+            request.setAttribute("filename", filename);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/modificarImagen.jsp");
+            dispatcher.forward(request, response);
+            
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
     }
 

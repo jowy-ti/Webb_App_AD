@@ -20,8 +20,9 @@
     </head>
     <body>
         <h1>Modificar Imagen</h1>
-        <form action = "modificarImagen" method = "POST" enctype="multipart/form-data">
-            <img src="uploads/${imagen}" alt="${imagen}" style="width:300px;height:150px;">
+        <c:set var="filename" value="${request.getParameter("filename")}" />
+        <form action = "modificarImagen" method = "POST">
+            <img src="uploads/${filename}" alt="${filename}" style="width:500px;height:300px;">
             <br/>
             <label for="title">Título Nuevo:</label>
             <input type="text" id="title" name="title" />

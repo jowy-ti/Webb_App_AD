@@ -41,7 +41,8 @@ public class UpdateDB {
             statement.setString(1, id_usuario);
             statement.setString(2, password);
             statement.executeUpdate();
-                                 
+            
+            return 0;                                 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return -1;
@@ -50,7 +51,6 @@ public class UpdateDB {
             // Se termina la conexión con la DB
             ConnectionDB.disconnectDB(connection);
         }
-        return 0;
     }
     
     static public int add_image(String title, String descr, String key_words,
@@ -80,7 +80,9 @@ public class UpdateDB {
             statement.setString(7, storage_date);
             statement.setString(8, filename);
             statement.executeUpdate();
-                                 
+            
+            return 0;
+            
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return -1;
@@ -89,7 +91,6 @@ public class UpdateDB {
             // Se termina la conexión con la DB
             ConnectionDB.disconnectDB(connection);
         }
-        return 0;
     }
     
     static public int delete_image(int id) {
@@ -105,6 +106,7 @@ public class UpdateDB {
             statement.setInt(1, id);
             statement.executeUpdate();
                                
+            return 0;
             
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -114,11 +116,29 @@ public class UpdateDB {
             // Se termina la conexión con la DB
             ConnectionDB.disconnectDB(connection);
         }
-        return 0;
+    }
+    
+    static class Booleanpointer {
+        boolean value;
+        
+        Booleanpointer(boolean val) {
+            value = val;
+        }
+    }
+    
+    static private String fill_query(String query, String field, String substitute, Booleanpointer coma) {
+        
+        if (substitute != null && !substitute.isEmpty()) {
+            if (coma.value) query = query + ", ";
+            query = query + field + "'" + substitute + "'";
+            coma.value = true;
+        }
+        
+        return query;
     }
     
     static public int update_image(String title, String descr, String key_words,
-            String author, String cap_date, String filename, int id) {
+            String author, String cap_date, int id) {
          // Se crea una conexión con la DB y se comprueba que ha salido bien
         Connection connection = ConnectionDB.connectDB();
 
@@ -126,61 +146,32 @@ public class UpdateDB {
             
             String query;
             PreparedStatement statement;
-            int index = 1;
+            Booleanpointer coma = new Booleanpointer(false);
+            
            
-            query = "UPDATE imagenes SET ";
-            String qtitle = "title = ?";
-            String qdescr = "description = ?";
-            String qkeywords = "keywords = ?"; 
-            String qauthor = "author = ?";
-            String qcapdate = "capture_date = ?";
-            String qfilename = "filename = ?";
-            statement = connection.prepareStatement(query);
+            query = "UPDATE image SET ";
+            String qtitle = "title = ";
+            String qdescr = "description = ";
+            String qkeywords = "keywords = "; 
+            String qauthor = "author = ";
+            String qcapdate = "capture_date = ";
             
-            if (!title.isEmpty()) {
-                query = query + qtitle;
-                if (!descr.isEmpty() && !key_words.isEmpty() && !author.isEmpty()
-                        && cap_date.isEmpty() && filename.isEmpty()) query += ", ";
-                statement.setString(index, title);
-                ++index;
-            }
-            if (!descr.isEmpty()) {
-                query = query + qdescr;
-                if (!key_words.isEmpty() && !author.isEmpty()
-                        && cap_date.isEmpty() && filename.isEmpty()) query += ", ";
-                statement.setString(index, descr);
-                ++index;
-            }
-            if (!key_words.isEmpty()) {
-                query = query + qkeywords;
-                if (!author.isEmpty() && cap_date.isEmpty() 
-                        && filename.isEmpty()) query += ", ";
-                statement.setString(index, key_words);
-                ++index;
-            }
-            if (!author.isEmpty()) {
-                query = query + qauthor;
-                if (cap_date.isEmpty() && filename.isEmpty()) query += ", ";
-                statement.setString(index, author);
-                ++index;
-            }
-            if (!cap_date.isEmpty()) {
-                query = query + qcapdate;
-                if (filename.isEmpty()) query += ", ";
-                statement.setString(index, cap_date);
-                ++index;
-            }
-            if (!filename.isEmpty()) {
-                query = query + qfilename;
-                statement.setString(index, filename);
-                ++index;
-            }
+            query = fill_query(query, qtitle, title, coma);
             
-            query = query + " WHERE id = ?";
-            statement.setInt(index, id);
+            query = fill_query(query, qdescr, descr, coma);
+            
+            query = fill_query(query, qkeywords, key_words, coma);
+            
+            query = fill_query(query, qauthor, author, coma);
+            
+            query = fill_query(query, qcapdate, cap_date, coma);
+            
+            query = query + " WHERE id = " + id;
+            System.out.println(query);
             statement = connection.prepareStatement(query);
             statement.executeUpdate();
                                
+            return 0;
             
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -190,6 +181,5 @@ public class UpdateDB {
             // Se termina la conexión con la DB
             ConnectionDB.disconnectDB(connection);
         }
-        return 0;
     }
 }
