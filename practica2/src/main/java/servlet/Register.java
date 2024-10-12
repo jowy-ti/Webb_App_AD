@@ -39,7 +39,7 @@ public class Register extends HttpServlet {
             // Se comprueba si se ha enviado un usuario o contraseña vacios
             if (user.equals("") || passw.equals("")) {
                 Errors.register_error(0, true);
-                response.sendRedirect("/practica2/register.jsp");
+                response.sendRedirect("register.jsp");
                 return;
             }
 
@@ -50,14 +50,14 @@ public class Register extends HttpServlet {
                 res = UpdateDB.add_user(user, passw);
                 
                 if (res == 0) {
-                    response.sendRedirect("/practica2/login.jsp");
+                    response.sendRedirect("login.jsp");
                     return;
                 }   
                 else Errors.register_error(res, false);
             }
             else Errors.register_error(res, false);
             
-            response.sendRedirect("/practica2/register.jsp");
+            response.sendRedirect("register.jsp");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

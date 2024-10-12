@@ -49,7 +49,7 @@ public class Login extends HttpServlet {
             // Se comprueba si se ha enviado un usuario o contraseña vacios
             if(user.equals("") || passw.equals("")) {
                 Errors.login_error(0, true);
-                response.sendRedirect("/practica2/login.jsp");
+                response.sendRedirect("login.jsp");
                 return;
             }
             
@@ -59,11 +59,11 @@ public class Login extends HttpServlet {
             if (res == 0) {
                 HttpSession sesion = request.getSession(true);
                 sesion.setAttribute("user", user);
-                response.sendRedirect("/practica2/menu.jsp");
+                response.sendRedirect("menu.jsp");
             }   
             else {    
                 Errors.login_error(res, false);
-                response.sendRedirect("/practica2/login.jsp");  
+                response.sendRedirect("login.jsp");  
             }
             
         } catch (IOException e) {

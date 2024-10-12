@@ -10,7 +10,7 @@
 
 <% 
     HttpSession sesion = request.getSession(false);
-    if (sesion.getAttribute("user") == null) response.sendRedirect("/practica2/error_out.jsp");
+    if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
 %>
 <!DOCTYPE html>
 <html>
@@ -37,11 +37,23 @@
             </ul>
         </form>
         <c:set var="session_images" value="${sessionScope.session_images}" />
-            <c:forEach var="imagen" items="${filenames}">
-                <img src="uploads/${imagen}" alt="${imagen}" style="width:500px;height:300px;"></li>
-                <c:if test="${session_images.contains(imagen)}">
-                    <a href="/practica2/eliminarImagen.jsp">Eliminar</a>
-                    <a href="/practica2/modificarImagen.jsp">Modificar</a>
+            <c:forEach var="imagen" items="${images}">
+                <c:set var="info_image" value="${imagen}" />
+                <p> Título: ${imagen.get(0)} </p>
+                <p> Descripción: ${imagen.get(1)} </p>
+                <p> Autor: ${imagen.get(2)} </p>
+                <img src="uploads/${imagen.get(3)}" alt="${imagen}" style="width:500px;height:300px;">
+                
+                <c:if test="${session_images.contains(imagen.get(3))}">
+                    <form action="eliminarImagen" method="GET">
+                            <button type="submit">Eliminar</button>
+                            <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
+                            <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
+                    </form>
+                    <form action="eliminarImagen" method="GET">
+                            <button type="submit">Modificar</button>
+                            <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
+                    </form>
                 </c:if>
                 <br> <br> <br>
             </c:forEach>

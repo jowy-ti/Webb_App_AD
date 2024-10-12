@@ -46,19 +46,19 @@ public class BuscarImagen extends HttpServlet {
             String title = request.getParameter("title");
             String author = request.getParameter("author");
             String keywords = request.getParameter("keywords");
+            ArrayList<ArrayList<String>> images = QueryDB.search_image(title, author, keywords);
             
-            ArrayList<String> filenames = QueryDB.search_image(title, author, keywords);
-            
-            if (filenames == null)  {
+
+            if (images == null)  {
                 response.sendRedirect("buscarImagen.jsp");
                 return;
             }//error
-            else if (filenames.isEmpty()) {
+            else if (images.isEmpty()) {
                 response.sendRedirect("buscarImagen.jsp");
                 return;
             }//error
             
-            request.setAttribute("filenames", filenames);
+            request.setAttribute("images", images);
             
             RequestDispatcher dispatcher = request.getRequestDispatcher("/buscarImagen.jsp");
             dispatcher.forward(request, response);
