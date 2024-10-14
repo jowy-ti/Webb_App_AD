@@ -4,13 +4,6 @@
  */
 package servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -20,8 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import DB.QueryDB;
 import DB.UpdateDB;
-import Err.Errors;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,7 +21,6 @@ import java.io.OutputStream;
 import jakarta.servlet.http.Part;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.logging.*;
 
 /**
  *
@@ -70,7 +60,7 @@ public class RegistrarImagen extends HttpServlet {
                     key_words.equals("") ||author.equals("") ||
                     cap_date.equals("")) {
                 //Tratamos error
-                response.sendRedirect("registrarImagen.jsp");
+                response.sendRedirect("error.jsp");
                 return;
             }
              
@@ -82,7 +72,7 @@ public class RegistrarImagen extends HttpServlet {
             //Comprovamos que no exista una imagen con el mismo nombre
             //Se debería enviar a página de error
             if (QueryDB.exists_image(filename) == 0) {
-                response.sendRedirect("error_out.jsp");
+                response.sendRedirect("error.jsp");
                 return; //Paramos la ejecucion antes de añadir la imagen
             }
 

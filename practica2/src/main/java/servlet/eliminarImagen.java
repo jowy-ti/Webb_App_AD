@@ -11,17 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
-import DB.QueryDB;
 import DB.UpdateDB;
 import jakarta.servlet.RequestDispatcher;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 
 /**
  *
@@ -57,8 +49,7 @@ public class eliminarImagen extends HttpServlet {
             boolean deleted = file.delete();
             if (deleted == false) {
                 //redirigir a pantalla de error
-                System.out.println ("El error es aqui");
-                response.sendRedirect("error_out.jsp");
+                response.sendRedirect("error.jsp");
             }
             else response.sendRedirect("buscarImagen.jsp");
             

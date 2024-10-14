@@ -11,17 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
-import DB.QueryDB;
 import DB.UpdateDB;
 import jakarta.servlet.RequestDispatcher;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 
 /**
  *
@@ -43,15 +34,19 @@ public class modificarImagen extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         try {
-             //Estos son los nuevos valores, si es null no se actualiza el valor antiguo
+            HttpSession sesion = request.getSession(false);
+            if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
+        
+            //Estos son los nuevos valores, si es null no se actualiza el valor antiguo
             String title = request.getParameter("title");
             String descr = request.getParameter("description");
             String key_words = request.getParameter("keywords");
             String author = request.getParameter("author");
             String cap_date = request.getParameter("capture_date");
             
-            if (id < 0) response.sendRedirect("error_out.jsp");
+            if (id < 0) response.sendRedirect("error.jsp");
             else UpdateDB.update_image(title, descr, key_words, author, cap_date, id);
             response.sendRedirect("buscarImagen.jsp");
             

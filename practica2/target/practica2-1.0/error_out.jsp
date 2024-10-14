@@ -13,8 +13,8 @@
     </head>
     <body>
         <h1>Un error inesperado a ocurrido</h1>
-        <li>
-            <a href="login.jsp">go to login</a>
-        </li>
+        
+        <a href="login.jsp">Go to login</a>
+        
     </body>
 </html>

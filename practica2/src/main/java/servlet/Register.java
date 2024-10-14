@@ -5,12 +5,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import DB.QueryDB;
 import DB.UpdateDB;
-import Err.Errors;
+//import Err.Errors;
 /**
  *
  * @author alumne
@@ -38,12 +32,11 @@ public class Register extends HttpServlet {
             
             // Se comprueba si se ha enviado un usuario o contraseña vacios
             if (user.equals("") || passw.equals("")) {
-                Errors.register_error(0, true);
-                response.sendRedirect("register.jsp");
+                response.sendRedirect("error_out.jsp");
                 return;
             }
 
-            // Comprabamos si existen las cuentas y en caso de no exister se crean
+            // Comprabamos si existen las cuentas y en caso de no existir se crean
             int res = QueryDB.exists_user(user, passw);
 
             if (res == -2) {
@@ -53,9 +46,9 @@ public class Register extends HttpServlet {
                     response.sendRedirect("login.jsp");
                     return;
                 }   
-                else Errors.register_error(res, false);
+                else response.sendRedirect("error_out.jsp");
             }
-            else Errors.register_error(res, false);
+            else response.sendRedirect("error_out.jsp");
             
             response.sendRedirect("register.jsp");
             

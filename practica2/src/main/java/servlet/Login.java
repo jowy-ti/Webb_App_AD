@@ -5,12 +5,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import DB.QueryDB;
-import Err.Errors;
+//import Err.Errors;
 
 /**
  *
@@ -48,8 +42,7 @@ public class Login extends HttpServlet {
             
             // Se comprueba si se ha enviado un usuario o contraseña vacios
             if(user.equals("") || passw.equals("")) {
-                Errors.login_error(0, true);
-                response.sendRedirect("login.jsp");
+                response.sendRedirect("error_out.jsp");
                 return;
             }
             
@@ -61,10 +54,7 @@ public class Login extends HttpServlet {
                 sesion.setAttribute("user", user);
                 response.sendRedirect("menu.jsp");
             }   
-            else {    
-                Errors.login_error(res, false);
-                response.sendRedirect("login.jsp");  
-            }
+            else response.sendRedirect("error_out.jsp");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());
