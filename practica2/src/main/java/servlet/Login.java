@@ -54,7 +54,7 @@ public class Login extends HttpServlet {
                 sesion.setAttribute("user", user);
                 response.sendRedirect("menu.jsp");
             }   
-            else response.sendRedirect("error_out.jsp");
+            else response.sendRedirect("error_out.jsp"); //error
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

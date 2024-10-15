@@ -42,15 +42,11 @@ public class Register extends HttpServlet {
             if (res == -2) {
                 res = UpdateDB.add_user(user, passw);
                 
-                if (res == 0) {
-                    response.sendRedirect("login.jsp");
-                    return;
-                }   
-                else response.sendRedirect("error_out.jsp");
+                if (res == 0) response.sendRedirect("login.jsp");
+
+                else response.sendRedirect("error_out.jsp"); //error
             }
-            else response.sendRedirect("error_out.jsp");
-            
-            response.sendRedirect("register.jsp");
+            else response.sendRedirect("error_out.jsp"); //error
             
         } catch (IOException e) {
             System.err.println(e.getMessage());
