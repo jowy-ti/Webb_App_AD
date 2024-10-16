@@ -108,6 +108,7 @@ public class UpdateDB {
         }
     }
     
+    // clase utilizada para saber cuando poner la coma en la sentencia de update
     static class Booleanpointer {
         boolean value;
         
@@ -118,6 +119,7 @@ public class UpdateDB {
     
     static private String fill_query(String query, String field, String substitute, Booleanpointer coma) {
         
+        // En caso de que el atributo sea null o esté vación no se usará en el update
         if (substitute != null && !substitute.isEmpty()) {
             if (coma.value) query = query + ", ";
             query = query + field + "'" + substitute + "'";
@@ -146,14 +148,11 @@ public class UpdateDB {
             String qauthor = "author = ";
             String qcapdate = "capture_date = ";
             
+            //rellenamos query según los atributos sean null o no
             query = fill_query(query, qtitle, title, coma);
-            
             query = fill_query(query, qdescr, descr, coma);
-            
             query = fill_query(query, qkeywords, key_words, coma);
-            
             query = fill_query(query, qauthor, author, coma);
-            
             query = fill_query(query, qcapdate, cap_date, coma);
             
             query = query + " WHERE id = " + id;
