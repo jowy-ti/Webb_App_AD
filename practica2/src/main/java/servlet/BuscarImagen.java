@@ -39,15 +39,11 @@ public class BuscarImagen extends HttpServlet {
             String keywords = request.getParameter("keywords");
             ArrayList<ArrayList<String>> images = QueryDB.search_image(title, author, keywords);
             
-
+ //|| images.isEmpty()
             if (images == null)  {
-                response.sendRedirect("error.jsp");
+                response.sendRedirect("error.jsp");//error
                 return;
-            }//error
-            else if (images.isEmpty()) {
-                response.sendRedirect("error.jsp");
-                return;
-            }//error
+            }
             
             request.setAttribute("images", images);
             

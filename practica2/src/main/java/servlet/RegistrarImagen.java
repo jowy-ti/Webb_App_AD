@@ -106,10 +106,8 @@ public class RegistrarImagen extends HttpServlet {
                     filecontent.close();
                 }
             }
-        
-            // Añadimos el atributo filename a la sesión
-            Filename_in_session(filename, sesion);
-
+            
+            // Se añade los datos de la imagen a la BD
             UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
             //todo ha ido bien
             response.sendRedirect("registrarImagen.jsp");
@@ -128,16 +126,6 @@ public class RegistrarImagen extends HttpServlet {
             }
         }
         return null;
-    }
-    
-    private void Filename_in_session(String filename, HttpSession sesion) {
-        
-        String files_sesion = "session_images";
-        ArrayList<String> filenames = (ArrayList<String>)sesion.getAttribute(files_sesion);
-        if (filenames == null) filenames = new ArrayList<>();
-
-        filenames.add(filename);
-        sesion.setAttribute(files_sesion, filenames);
     }
 
     /**

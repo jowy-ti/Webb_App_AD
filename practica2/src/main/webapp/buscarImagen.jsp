@@ -40,15 +40,16 @@
             <br/>
             <a href="menu.jsp">Return</a>
         </form>
-        <c:set var="session_images" value="${sessionScope.session_images}" />
+        <c:set var="user" value="${sessionScope.user}" />
             <c:forEach var="imagen" items="${images}">
-                <c:set var="info_image" value="${imagen}" />
+
                 <p> Título: ${imagen.get(0)} </p>
                 <p> Descripción: ${imagen.get(1)} </p>
+                <p> Palabras clave: ${imagen.get(6)} </p>
                 <p> Autor: ${imagen.get(2)} </p>
                 <img src="uploads/${imagen.get(3)}" alt="${imagen}" style="width:500px;height:300px;">
                 
-                <c:if test="${session_images.contains(imagen.get(3))}">
+                <c:if test="${user == imagen.get(5)}">
                     <form action="eliminarImagen" method="GET">
                             <button type="submit">Eliminar</button>
                             <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />

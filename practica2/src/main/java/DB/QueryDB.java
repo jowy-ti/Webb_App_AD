@@ -61,10 +61,22 @@ public class QueryDB {
             
             query = "select * from image where ";
             querynull = "select * from image where ";
+            boolean or = false;
             
-            if (!title.isEmpty()) query = query + qtitle;
-            if (!author.isEmpty()) query = query + qauthor;
-            if (!keywords.isEmpty()) query = query + qkeywords;
+            if (!title.isEmpty()) {
+                query = query + qtitle;
+                or = true;
+            }
+            if (!author.isEmpty()) {
+                if (or) query = query + " OR ";
+                query = query + qauthor;
+                or = true;
+            }
+            if (!keywords.isEmpty()) {
+                if (or) query = query + " OR ";
+                query = query + qkeywords;
+            }
+            
             if (query.equals(querynull)) query = query + "'1' = '1'";
             
             statement = connection.prepareStatement(query);
@@ -80,6 +92,8 @@ public class QueryDB {
                 info.add(rs.getString("author"));
                 info.add(rs.getString("filename"));
                 info.add(rs.getString("id"));
+                info.add(rs.getString("creator"));
+                info.add(rs.getString("keywords"));
                 images.add(info);
             }
 

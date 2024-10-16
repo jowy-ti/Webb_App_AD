@@ -5,7 +5,6 @@ servlet/Register.class
 servlet/RegistrarImagen.class
 servlet/Login.class
 servlet/BuscarImagen.class
-Err/Errors.class
 DB/QueryDB.class
 testDB/TestDB.class
 test/practica2/JakartaRestConfiguration.class
