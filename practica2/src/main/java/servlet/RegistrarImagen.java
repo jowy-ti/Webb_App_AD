@@ -69,6 +69,10 @@ public class RegistrarImagen extends HttpServlet {
             final Part filePart = request.getPart("file");
             final String filename = getFileName(filePart);
             
+            if (filename.equals("")) {
+                response.sendRedirect("error.jsp");
+                return;
+            }
             //Comprovamos que no exista una imagen con el mismo nombre
             //Se debería enviar a página de error
             if (QueryDB.exists_image(filename) == 0) {
