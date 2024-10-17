@@ -21,7 +21,7 @@
     <body>
         <h1>Modificar Imagen</h1>
         <c:set var="filename" value="${request.getParameter("filename")}" />
-        <form action = "modificarImagen" method = "POST">
+        <form action = "modificarImagen" method = "POST" enctype="multipart/form-data">
             <img src="uploads/${filename}" alt="${filename}" style="width:500px;height:300px;">
             <br/>
             <label for="title">Título Nuevo:</label>
@@ -38,6 +38,9 @@
             <br/>
             <label for="capture_date">Fecha de Captura Nueva:</label>
             <input type="text" id="capture_date" name="capture_date" />
+            <br/>
+            Seleccione la nueva imagen:
+            <input type="file" name="file">
             <br/>
             <button type="submit">Modificar</button>
             <br/>

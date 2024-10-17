@@ -4,6 +4,7 @@
  */
 package servlet;
 
+import DB.QueryDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,6 +14,12 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import DB.UpdateDB;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  *
@@ -56,6 +63,54 @@ public class ModificarImagen extends HttpServlet {
                 dispatcher.forward(request, response);
             }
             
+            // Create path components to save the file
+            final String path = "/var/webapp/uploads";
+            final Part filePart = request.getPart("file");
+            final String filename = getFileName(filePart);
+            
+            //Si entramos en el if significa que si hay un cambio de imagen
+            if (!filename.equals("")) {
+                UpdateDB.delete_image(id); //Se elimina la imagen anterior
+                //Comprovamos que no exista una imagen con el mismo nombre
+                //Se debería enviar a página de error
+                if (QueryDB.exists_image(filename) == 0) {
+                    response.sendRedirect("error.jsp");
+                    return; //Paramos la ejecucion antes de añadir la imagen
+                }
+
+                OutputStream out = null;
+                InputStream filecontent = null;
+
+                try {
+                    out = new FileOutputStream(new File(path + File.separator
+                            + filename));
+                    filecontent = filePart.getInputStream();
+
+                    int read = 0;
+                    final byte[] bytes = new byte[1024];
+
+                    while ((read = filecontent.read(bytes)) != -1) {
+                        out.write(bytes, 0, read);
+                    }
+
+
+                } catch (FileNotFoundException fne) {
+
+                } finally {
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (filecontent != null) {
+                        filecontent.close();
+                    }
+                }
+                
+                String creator = sesion.getAttribute("user").toString();
+                // Se añade los datos de la imagen a la BD
+                UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
+            }
+            
+            
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
@@ -80,6 +135,17 @@ public class ModificarImagen extends HttpServlet {
         }
     }
 
+    private String getFileName(final Part part) {
+
+        for (String content : part.getHeader("content-disposition").split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(
+                        content.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return null;
+    }
+    
     /**
      * Returns a short description of the servlet.
      *
