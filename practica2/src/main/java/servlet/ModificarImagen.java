@@ -62,8 +62,15 @@ public class ModificarImagen extends HttpServlet {
             
             //Si entramos en el if significa que si hay un cambio de imagen
             if (!filename.equals("")) {
-                final String path = "/var/webapp/uploads";
                 
+                //Comprovamos que no exista una imagen con el mismo nombre
+                //Se debería enviar a página de error
+                if (QueryDB.exists_image(filename) == 0) {
+                    response.sendRedirect("error.jsp");
+                    return; //Paramos la ejecucion antes de añadir la imagen
+                }
+                
+                final String path = "/var/webapp/uploads";
                 String old_filename = QueryDB.get_filename(id);
                 File file = new File(path+"/"+old_filename);
                 boolean deleted = file.delete();
@@ -72,13 +79,6 @@ public class ModificarImagen extends HttpServlet {
                     return;
                 }
                 
-                //Comprovamos que no exista una imagen con el mismo nombre
-                //Se debería enviar a página de error
-                if (QueryDB.exists_image(filename) == 0) {
-                    response.sendRedirect("error.jsp");
-                    return; //Paramos la ejecucion antes de añadir la imagen
-                }
-
                 OutputStream out = null;
                 InputStream filecontent = null;
 
