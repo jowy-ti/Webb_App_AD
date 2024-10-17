@@ -51,7 +51,7 @@ public class eliminarImagen extends HttpServlet {
                 //redirigir a pantalla de error
                 response.sendRedirect("error.jsp");
             }
-            else response.sendRedirect("buscarImagen.jsp");
+            else response.sendRedirect("imagenEliminada.jsp");
             
         } catch(IOException e) {
             System.err.println(e.getMessage());

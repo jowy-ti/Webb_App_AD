@@ -27,6 +27,8 @@
             Esta seguro que esta es la imagen que quiere eliminar?
             <br/>
             <button type="submit">Eliminar</button>
+            <br/>
+            <a href="menu.jsp">Go back to menu</a>
         </form>
     </body>
 </html>
