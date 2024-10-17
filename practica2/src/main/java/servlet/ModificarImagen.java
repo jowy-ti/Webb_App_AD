@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import DB.UpdateDB;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,6 +27,7 @@ import java.io.OutputStream;
  * @author alumne
  */
 @WebServlet(name = "modificarImagen", urlPatterns = {"/modificarImagen"})
+@MultipartConfig
 public class ModificarImagen extends HttpServlet {
     
     int id;
@@ -53,24 +55,23 @@ public class ModificarImagen extends HttpServlet {
             String author = request.getParameter("author");
             String cap_date = request.getParameter("capture_date");
             
-            if (id < 0) response.sendRedirect("error.jsp");
-            else {
-                UpdateDB.update_image(title, descr, key_words, author, cap_date, id);
-                
-                request.setAttribute("message", "Imagen modificada correctamente");
-                request.setAttribute("registarImagen", false);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/operacionExitosa.jsp");
-                dispatcher.forward(request, response);
-            }
             
             // Create path components to save the file
-            final String path = "/var/webapp/uploads";
             final Part filePart = request.getPart("file");
             final String filename = getFileName(filePart);
             
             //Si entramos en el if significa que si hay un cambio de imagen
             if (!filename.equals("")) {
-                UpdateDB.delete_image(id); //Se elimina la imagen anterior
+                final String path = "/var/webapp/uploads";
+                
+                String old_filename = QueryDB.get_filename(id);
+                File file = new File(path+"/"+old_filename);
+                boolean deleted = file.delete();
+                if (deleted == false) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
+                
                 //Comprovamos que no exista una imagen con el mismo nombre
                 //Se debería enviar a página de error
                 if (QueryDB.exists_image(filename) == 0) {
@@ -103,13 +104,20 @@ public class ModificarImagen extends HttpServlet {
                     if (filecontent != null) {
                         filecontent.close();
                     }
-                }
-                
-                String creator = sesion.getAttribute("user").toString();
-                // Se añade los datos de la imagen a la BD
-                UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
+                } 
             }
             
+            if (id >= 0) UpdateDB.update_image(title, descr, key_words, author, cap_date, filename, id);
+            else {
+                response.sendRedirect("error.jsp");
+                return;
+            }
+            
+            //Todo ha ido bien
+            request.setAttribute("message", "Imagen modificada correctamente");
+            request.setAttribute("registarImagen", false);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/operacionExitosa.jsp");
+            dispatcher.forward(request, response);
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

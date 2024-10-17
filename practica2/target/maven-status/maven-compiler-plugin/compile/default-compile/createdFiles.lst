@@ -1,6 +1,5 @@
 DB/ConnectionDB.class
 test/practica2/resources/JakartaEE91Resource.class
-servlet/eliminarImagen.class
 servlet/Register.class
 servlet/RegistrarImagen.class
 servlet/Login.class
@@ -9,4 +8,3 @@ DB/QueryDB.class
 testDB/TestDB.class
 test/practica2/JakartaRestConfiguration.class
 DB/UpdateDB.class
-servlet/modificarImagen.class
