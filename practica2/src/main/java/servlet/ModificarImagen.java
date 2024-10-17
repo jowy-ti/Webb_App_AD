@@ -19,7 +19,7 @@ import jakarta.servlet.RequestDispatcher;
  * @author alumne
  */
 @WebServlet(name = "modificarImagen", urlPatterns = {"/modificarImagen"})
-public class modificarImagen extends HttpServlet {
+public class ModificarImagen extends HttpServlet {
     
     int id;
     
@@ -47,8 +47,14 @@ public class modificarImagen extends HttpServlet {
             String cap_date = request.getParameter("capture_date");
             
             if (id < 0) response.sendRedirect("error.jsp");
-            else UpdateDB.update_image(title, descr, key_words, author, cap_date, id);
-            response.sendRedirect("imagenModificada.jsp");
+            else {
+                UpdateDB.update_image(title, descr, key_words, author, cap_date, id);
+                
+                request.setAttribute("message", "Imagen modificada correctamente");
+                request.setAttribute("registarImagen", false);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/operacionExitosa.jsp");
+                dispatcher.forward(request, response);
+            }
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

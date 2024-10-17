@@ -20,7 +20,7 @@ import java.io.File;
  * @author alumne
  */
 @WebServlet(name = "eliminarImagen", urlPatterns = {"/eliminarImagen"})
-public class eliminarImagen extends HttpServlet {
+public class EliminarImagen extends HttpServlet {
     
     
     int id;
@@ -51,7 +51,12 @@ public class eliminarImagen extends HttpServlet {
                 //redirigir a pantalla de error
                 response.sendRedirect("error.jsp");
             }
-            else response.sendRedirect("imagenEliminada.jsp");
+            else {
+                request.setAttribute("message", "Imagen eliminada correctamente");
+                request.setAttribute("registarImagen", false);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/operacionExitosa.jsp");
+                dispatcher.forward(request, response);
+            }
             
         } catch(IOException e) {
             System.err.println(e.getMessage());

@@ -1,11 +1,12 @@
 <%-- 
-    Document   : imagenModificada
-    Created on : 13 oct 2024, 16:46:38
+    Document   : imagenEliminada
+    Created on : 17 oct 2024, 19:19:43
     Author     : alumne
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <% 
     HttpSession sesion = request.getSession(false);
@@ -16,11 +17,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Modified Image</title>
+        <title>Operación realizada correctamente</title>
     </head>
     <body>
-        <h1>La imagen se ha modificado correctamente</h1>
-        <br/>
-        <a href="menu.jsp">Go back to menu</a>
+        <p> ${message} </p>
+        <br>
+        <a href="menu.jsp">Volver al menú</a>
+        <c:if test="${registarImagen}">
+            <br>
+            <a href="registrarImagen.jsp">Seguir registrando imágenes</a>
+        </c:if>
     </body>
 </html>

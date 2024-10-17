@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import DB.QueryDB;
 import DB.UpdateDB;
+import jakarta.servlet.RequestDispatcher;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -109,7 +110,10 @@ public class RegistrarImagen extends HttpServlet {
             // Se añade los datos de la imagen a la BD
             UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
             //todo ha ido bien
-            response.sendRedirect("imagenRegistrada.jsp");
+            request.setAttribute("message", "Imagen registrada correctamente");
+            request.setAttribute("registarImagen", true);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/operacionExitosa.jsp");
+            dispatcher.forward(request, response);
             
         } catch (IOException e) {
             System.err.println(e.getMessage());
