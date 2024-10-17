@@ -57,10 +57,6 @@ public class ModificarImagen extends HttpServlet {
             else {
                 UpdateDB.update_image(title, descr, key_words, author, cap_date, id);
                 
-                request.setAttribute("message", "Imagen modificada correctamente");
-                request.setAttribute("registarImagen", false);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/operacionExitosa.jsp");
-                dispatcher.forward(request, response);
             }
             
             // Create path components to save the file
@@ -75,7 +71,7 @@ public class ModificarImagen extends HttpServlet {
                 //Se debería enviar a página de error
                 if (QueryDB.exists_image(filename) == 0) {
                     response.sendRedirect("error.jsp");
-                    return; //Paramos la ejecucion antes de añadir la imagen
+                    return;
                 }
 
                 OutputStream out = null;
@@ -108,6 +104,10 @@ public class ModificarImagen extends HttpServlet {
                 String creator = sesion.getAttribute("user").toString();
                 // Se añade los datos de la imagen a la BD
                 UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
+                request.setAttribute("message", "Imagen modificada correctamente");
+                request.setAttribute("registarImagen", false);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/operacionExitosa.jsp");
+                dispatcher.forward(request, response);
             }
             
             

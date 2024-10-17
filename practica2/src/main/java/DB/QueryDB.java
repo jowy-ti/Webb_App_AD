@@ -78,6 +78,7 @@ public class QueryDB {
                 query = query + qkeywords;
             }
             
+            // Si no se ha añadido nada a la query consultamos todas las imágenes
             if (query.equals(querynull)) query = query + "'1' = '1'";
             
             statement = connection.prepareStatement(query);
