@@ -48,7 +48,7 @@ public class modificarImagen extends HttpServlet {
             
             if (id < 0) response.sendRedirect("error.jsp");
             else UpdateDB.update_image(title, descr, key_words, author, cap_date, id);
-            response.sendRedirect("buscarImagen.jsp");
+            response.sendRedirect("imagenModificada.jsp");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());
