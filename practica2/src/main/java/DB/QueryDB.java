@@ -110,6 +110,7 @@ public class QueryDB {
         }
     }
     
+    
     static public int exists_image(String filename){
         
         // Se crea una conexión con la DB y se comprueba que ha salido bien

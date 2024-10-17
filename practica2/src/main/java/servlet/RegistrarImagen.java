@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import jakarta.servlet.http.Part;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 /**
  *
@@ -110,7 +109,7 @@ public class RegistrarImagen extends HttpServlet {
             // Se añade los datos de la imagen a la BD
             UpdateDB.add_image(title, descr, key_words, author, creator, cap_date, filename);
             //todo ha ido bien
-            response.sendRedirect("registrarImagen.jsp");
+            response.sendRedirect("imagenRegistrada.jsp");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());
