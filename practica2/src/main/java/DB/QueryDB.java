@@ -139,4 +139,32 @@ public class QueryDB {
         }
     }
     
+    static public String get_filename(int id){
+        
+        // Se crea una conexión con la DB y se comprueba que ha salido bien
+        Connection connection = ConnectionDB.connectDB();
+        
+        try {
+            
+            String query;
+            PreparedStatement statement;
+            query = "select filename from image where id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            
+            if (rs.next()) return rs.getString("filename"); 
+            
+            return ""; 
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
+    }
+    
 }

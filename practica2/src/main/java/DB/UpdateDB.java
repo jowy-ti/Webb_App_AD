@@ -130,7 +130,7 @@ public class UpdateDB {
     }
     
     static public int update_image(String title, String descr, String key_words,
-            String author, String cap_date, int id) {
+            String author, String cap_date, String filename, int id) {
          // Se crea una conexión con la DB y se comprueba que ha salido bien
         Connection connection = ConnectionDB.connectDB();
 
@@ -147,6 +147,7 @@ public class UpdateDB {
             String qkeywords = "keywords = "; 
             String qauthor = "author = ";
             String qcapdate = "capture_date = ";
+            String qfilename = "filename = ";
             
             //rellenamos query según los atributos sean null o no
             query = fill_query(query, qtitle, title, coma);
@@ -154,6 +155,7 @@ public class UpdateDB {
             query = fill_query(query, qkeywords, key_words, coma);
             query = fill_query(query, qauthor, author, coma);
             query = fill_query(query, qcapdate, cap_date, coma);
+            query = fill_query(query, qfilename,filename, coma);
             
             query = query + " WHERE id = " + id;
             System.out.println(query);

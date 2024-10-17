@@ -37,6 +37,8 @@ public class BuscarImagen extends HttpServlet {
             String title = request.getParameter("title");
             String author = request.getParameter("author");
             String keywords = request.getParameter("keywords");
+            
+            // Realizamos la búsqueda de las imágenes
             ArrayList<ArrayList<String>> images = QueryDB.search_image(title, author, keywords);
             
             if (images == null)  {

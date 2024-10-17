@@ -97,7 +97,7 @@ public class RegistrarImagen extends HttpServlet {
 
 
             } catch (FileNotFoundException fne) {
-
+                System.err.println(fne.getMessage());
             } finally {
                 if (out != null) {
                     out.close();

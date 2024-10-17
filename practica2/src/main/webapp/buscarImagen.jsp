@@ -48,16 +48,16 @@
             <p> Título: ${imagen.get(0)} </p>
             <p> Descripción: ${imagen.get(1)} </p>
             <p> Palabras clave: ${imagen.get(6)} </p>
-            <p> Autor: ${imagen.get(2)} </p> 
+            <p> Autor: ${imagen.get(2)} </p>
             <img src="uploads/${imagen.get(3)}" alt="${imagen}" style="width:500px;height:300px;">
                 
             <c:if test="${user == imagen.get(5)}">
                 <form action="eliminarImagen" method="GET">
-                    <button type="submit">Eliminar</button>    
-                    <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />    
+                    <button type="submit">Eliminar</button>
+                    <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
                     <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
                 </form>
-                <form action="modificarImagen" method="GET">     
+                <form action="modificarImagen" method="GET">
                     <button type="submit">Modificar</button>
                     <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
                     <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
