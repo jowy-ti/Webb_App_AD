@@ -63,6 +63,7 @@ public class QueryDB {
             querynull = "select * from image where ";
             boolean or = false;
             
+            //query dinámica
             if (!title.isEmpty()) {
                 query = query + qtitle;
                 or = true;
