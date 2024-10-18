@@ -10,47 +10,54 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import DB.QueryDB;
-import DB.UpdateDB;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 //import Err.Errors;
+
 /**
  *
  * @author alumne
  */
-@WebServlet(name = "register", urlPatterns = {"/register"})
-public class Register extends HttpServlet {
-    
+@WebServlet(name = "login", urlPatterns = {"/login"})
+public class Login_s extends HttpServlet {
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+ 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html;charset=UTF-8");
         try {
             
-            String user = request.getParameter("id_usuario");
-            String passw = request.getParameter("password");
+            StringBuilder stringBuilder = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
             
-            // Se comprueba si se ha enviado un usuario o contraseña vacios
-            if (user.equals("") || passw.equals("")) {
-                response.sendRedirect("error_out.jsp");
-                return;
-            }
-
-            // Comprabamos si existen las cuentas y en caso de no existir se crean
-            int res = QueryDB.exists_user(user, passw);
-
-            if (res == -2) {
-                res = UpdateDB.add_user(user, passw);
-                
-                if (res == 0) response.sendRedirect("login.jsp");
-
-                else response.sendRedirect("error_out.jsp"); //error
-            }
-            else response.sendRedirect("error_out.jsp"); //error
+            String[] params = stringBuilder.toString().split("&");
+            String user = null;
+            String passw = null;
+            user = params[0];
+            passw = params[1];
+            
+            System.out.println(user+"   "+passw);
+            System.out.println("imprimo_cosas: klfkwoejfoiwnefowiefin");
             
         } catch (IOException e) {
             System.err.println(e.getMessage());
-        } 
+        }        
     }
 
     /**
@@ -63,5 +70,5 @@ public class Register extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
 }
-

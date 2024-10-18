@@ -11,15 +11,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import DB.QueryDB;
-//import Err.Errors;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  *
  * @author alumne
  */
 @WebServlet(name = "login", urlPatterns = {"/login"})
-public class Login extends HttpServlet {
+public class Login_c extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -36,25 +37,34 @@ public class Login extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         try {
-            
             String user = request.getParameter("id_usuario");
             String passw = request.getParameter("password");
             
-            // Se comprueba si se ha enviado un usuario o contraseña vacios
-            if(user.equals("") || passw.equals("")) {
-                response.sendRedirect("error_out.jsp");
-                return;
-            }
+            String urlstring = "http://localhost:8080/servidor/login";
+            HttpURLConnection connection = null;
+            URL url = new URL(urlstring);
+            connection = (HttpURLConnection) url.openConnection();
             
-            // Se comprueba si existe la cuenta, si existe dejamos pasar
-            int res = QueryDB.exists_user(user,passw);
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            // Enviar los datos
+            String postData = "string1=" + user + "&string2=" + passw;
+            OutputStream os = connection.getOutputStream();
+            os.write(postData.getBytes());
+            os.flush();
             
-            if (res == 0) {
+            // Leer la respuesta (opcional)
+            int responseCode = connection.getResponseCode();
+            System.out.println("Statuscode"+responseCode);
+            
+            if (1 == 1) {
+                
                 HttpSession sesion = request.getSession(true);
                 sesion.setAttribute("user", user);
                 response.sendRedirect("menu.jsp");
             }   
-            else response.sendRedirect("error_out.jsp"); //error
             
         } catch (IOException e) {
             System.err.println(e.getMessage());

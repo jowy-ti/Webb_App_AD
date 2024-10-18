@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
  */
 @WebServlet(name = "RegistrarImagen", urlPatterns = {"/registrarImagen"})
 @MultipartConfig
-public class RegistrarImagen extends HttpServlet {
+public class RegistrarImagen_s extends HttpServlet {
     
     /**
      * Handles the HTTP <code>POST</code> method.

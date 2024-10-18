@@ -28,7 +28,7 @@ import java.io.OutputStream;
  */
 @WebServlet(name = "modificarImagen", urlPatterns = {"/modificarImagen"})
 @MultipartConfig
-public class ModificarImagen extends HttpServlet {
+public class ModificarImagen_s extends HttpServlet {
     
     int id;
     

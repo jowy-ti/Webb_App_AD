@@ -20,7 +20,7 @@ import java.io.File;
  * @author alumne
  */
 @WebServlet(name = "eliminarImagen", urlPatterns = {"/eliminarImagen"})
-public class EliminarImagen extends HttpServlet {
+public class EliminarImagen_s extends HttpServlet {
     
     
     int id;

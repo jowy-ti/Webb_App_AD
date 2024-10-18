@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 
 @WebServlet(name = "BuscarImagen", urlPatterns = {"/BuscarImagen"})
-public class BuscarImagen extends HttpServlet {
+public class BuscarImagen_s extends HttpServlet {
     
     
     @Override
