@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import DB.QueryDB;
+import jakarta.ws.rs.core.Response;
 //import Err.Errors;
+
 
 /**
  *
@@ -22,54 +24,38 @@ import DB.QueryDB;
 public class Login extends HttpServlet {
 
     /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
- 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        response.setContentType("text/html;charset=UTF-8");
+    * POST method to login in the application
+    * @param username
+    * @param password
+    * @return
+    *
+    *@Path("login")
+    *@POST
+    *@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    *@Produces(MediaType.APPLICATION_JSON)
+    **/
+    public Response login(String username, String password)  {
         try {
             
-            String user = request.getParameter("id_usuario");
-            String passw = request.getParameter("password");
-            
             // Se comprueba si se ha enviado un usuario o contraseña vacios
-            if(user.equals("") || passw.equals("")) {
-                response.sendRedirect("error_out.jsp");
-                return;
+            if(username.equals("") || password.equals("")) {
+                return Response.status(Response.Status.NOT_ACCEPTABLE)
+                        .entity("Invalid credentials: null")
+                        .build();
             }
             
             // Se comprueba si existe la cuenta, si existe dejamos pasar
-            int res = QueryDB.exists_user(user,passw);
+            int res = QueryDB.exists_user(username,password);
             
-            if (res == 0) {
-                HttpSession sesion = request.getSession(true);
-                sesion.setAttribute("user", user);
-                response.sendRedirect("menu.jsp");
-            }   
-            else response.sendRedirect("error_out.jsp"); //error
+            if (res == 0) return Response.accepted().build();
+            else return Response.status(Response.Status.NOT_ACCEPTABLE)
+                        .entity("The user with credentials $username, $password does not exist")
+                        .build(); //error
             
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
+            return Response.serverError().build();
         }        
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
     
 }
