@@ -1,4 +1,4 @@
-package test.practica2;
+package test.cliente;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

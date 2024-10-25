@@ -1,4 +1,4 @@
-package test.practica2.resources;
+package test.servidor.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
