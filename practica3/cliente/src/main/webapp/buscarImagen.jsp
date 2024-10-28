@@ -6,6 +6,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
+<%@page import="jakarta.servlet.http.HttpServletRequest;" %>
+
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <% 
@@ -47,15 +49,13 @@
             <a href="menu.jsp">Return</a>
         </form>
         <c:set var="user" value="${sessionScope.user}" />
-        <c:if test="${images.isEmpty()}">
-            <p> No se han encontrado coincidencias con su busqueda </p>
-        </c:if>
+
         <c:forEach var="imagen" items="${images}">
-            <p> Título: ${imagen.get(0)} </p>
-            <p> Descripción: ${imagen.get(1)} </p>
-            <p> Palabras clave: ${imagen.get(6)} </p>
-            <p> Autor: ${imagen.get(2)} </p> 
-            <img src="uploads/${imagen.get(3)}" alt="${imagen}" style="width:500px;height:300px;">
+            <p> Id: ${imagen.getInt("id")} </p>
+            <p> Título: ${imagen.getString("title")} </p>
+            <p> Autor: ${imagen.getString("author")} </p> 
+            <p> Palabras clave: ${imagen.getString("keywords")} </p>
+            <p> Fecha de creación: ${imagen.getString("date")} </p>
                 
             <c:if test="${user == imagen.get(5)}">
                 <form action="eliminarImagen" method="GET">
