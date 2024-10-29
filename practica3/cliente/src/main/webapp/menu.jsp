@@ -22,7 +22,7 @@
             <h1>MENU</h1>
             <a href="registrarImagen.jsp">Registrar imagen</a>
             <br/>
-            <a href="buscarImagen.jsp">Buscar imagen</a>
+            <a href="eleccionBusqueda.jsp">Buscar imagen</a>
         </center>
     </body>
 </html>

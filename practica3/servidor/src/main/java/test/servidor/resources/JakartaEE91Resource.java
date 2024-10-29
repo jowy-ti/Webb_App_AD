@@ -177,7 +177,7 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByID (@PathParam("id") int id) {
-        ArrayList<Image> Images = QueryDB.search_image_by_ID(id);
+        ArrayList<Image> Images = QueryDB.search_image(id, null, "id");
         
         if (Images != null) {
             Gson gson = new Gson();
@@ -202,9 +202,21 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByTitle (@PathParam("title") String title) {
-
-        return null;
-
+        ArrayList<Image> Images = QueryDB.search_image(-1, title, "title");
+        
+        if (Images != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(Images);
+        
+            return Response.ok(json)
+                            .type(MediaType.APPLICATION_JSON)
+                            .build();
+        }
+        else {
+            return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Data not found for Title: " + title + "\"}")
+                               .build();
+        }
     }
     /**
     * GET method to search images by creation date. Date format should be
@@ -216,9 +228,21 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByCreationDate (@PathParam("date") String date) {
-
-        return null;
-
+        ArrayList<Image> Images = QueryDB.search_image(-1, date, "capture_date");
+        
+        if (Images != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(Images);
+        
+            return Response.ok(json)
+                            .type(MediaType.APPLICATION_JSON)
+                            .build();
+        }
+        else {
+            return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Data not found for Capture_date: " + date + "\"}")
+                               .build();
+        }
     }
     /**
     * GET method to search images by author
@@ -229,9 +253,21 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByAuthor (@PathParam("author") String author) {
-
-        return null;
-
+        ArrayList<Image> Images = QueryDB.search_image(-1, author, "author");
+        
+        if (Images != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(Images);
+        
+            return Response.ok(json)
+                            .type(MediaType.APPLICATION_JSON)
+                            .build();
+        }
+        else {
+            return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Data not found for Author: " + author + "\"}")
+                               .build();
+        }
     }
     /**
     * GET method to search images by keyword
@@ -242,8 +278,20 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByKeywords (@PathParam("keywords") String keywords) {
-
-        return null;
-
+        ArrayList<Image> Images = QueryDB.search_image(-1, keywords, "keywords");
+        
+        if (Images != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(Images);
+        
+            return Response.ok(json)
+                            .type(MediaType.APPLICATION_JSON)
+                            .build();
+        }
+        else {
+            return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Data not found for Keywords: " + keywords + "\"}")
+                               .build();
+        }
     }
 }

@@ -18,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.servlet.RequestDispatcher;
 import java.io.StringReader;
@@ -39,7 +38,6 @@ public class BuscarImagen extends HttpServlet {
         HttpURLConnection connection = null;
         
     	try {
-            
             HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("user") == null) {
                 response.sendRedirect("error_out.jsp");
@@ -51,9 +49,20 @@ public class BuscarImagen extends HttpServlet {
             String author = request.getParameter("author");
             String keywords = request.getParameter("keywords");
             String date = request.getParameter("date");
-       	 
-            String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/searchID/" + id;
-
+            String begin_url = "http://localhost:8080/servidor/resources/jakartaee9/";
+            String urlstring = null;
+                   	 
+            if (id != null) urlstring = begin_url + "searchID/" + id;
+            else if (title != null) urlstring = begin_url + "searchTitle/" + title;
+            else if (date != null) urlstring = begin_url + "searchCreationDate/" + date;
+            else if (author != null) urlstring = begin_url + "searchAuthor/" + author;
+            else if (keywords != null) urlstring = begin_url + "searchKeywords/" + keywords;
+            
+            if (urlstring == null) {
+                response.sendRedirect("error_out.jsp");
+                return;
+            }
+            
             URL url = new URL(urlstring);
             connection = (HttpURLConnection) url.openConnection();
        	 

@@ -21,24 +21,38 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Busqueda a partir de título y autor</h1>
+        <h1>Busqueda</h1>
+        <%
+            String election = request.getParameter("election");
+            request.setAttribute("election", election);
+        %>
         <form action="BuscarImagen" method="GET">
             <ul>
+                <c:if test="${election == 'id'}">
                 <label for="id">Id:</label>
                 <input type="text" id="id" name="id" />
                 <br/>
+                </c:if>
+                <c:if test="${election == 'title'}">
                 <label for="title">Título:</label>
                 <input type="text" id="title" name="title" />
                 <br/>
+                </c:if>
+                <c:if test="${election == 'author'}">
                 <label for="author">Autor:</label>
                 <input type="text" id="author" name="author" />
                 <br/>
+                </c:if>
+                <c:if test="${election == 'keywords'}">
                 <label for="keywords">Palabras clave:</label>
                 <input type="text" id="keywords" name="keywords" />
                 <br/>
+                </c:if>
+                <c:if test="${election == 'date'}">
                 <label for="date">Fecha:</label>
                 <input type="text" id="date" name="date" />
                 <br/>
+                </c:if>
                 <button type="submit">Search</button>
                 
                 <br>
@@ -46,7 +60,7 @@
             </ul>
             <br/>
             <br/>
-            <a href="menu.jsp">Return</a>
+            <a href="eleccionBusqueda.jsp">Return</a>
         </form>
         <c:set var="user" value="${sessionScope.user}" />
 
@@ -56,8 +70,10 @@
             <p> Autor: ${imagen.getString("author")} </p> 
             <p> Palabras clave: ${imagen.getString("keywords")} </p>
             <p> Fecha de creación: ${imagen.getString("date")} </p>
-                
-            <c:if test="${user == imagen.get(5)}">
+            <p> Creador: ${imagen.getString("creator")} </p>
+            
+            <%--
+            <c:if test="${user == imagen.getString()}">
                 <form action="eliminarImagen" method="GET">
                     <button type="submit">Eliminar</button>    
                     <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />    
@@ -70,6 +86,7 @@
                 </form>
             </c:if>
             <br> <br> <br>
+            --%>
         </c:forEach>
     </body>
 </html>
