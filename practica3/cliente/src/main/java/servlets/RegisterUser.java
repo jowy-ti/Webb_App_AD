@@ -10,7 +10,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,8 +18,8 @@ import java.net.URL;
  *
  * @author alumne
  */
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "RegisterUser", urlPatterns = {"/registerUser"})
+public class RegisterUser extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -37,6 +36,7 @@ public class Login extends HttpServlet {
     	try {
         	String user = request.getParameter("id_usuario");
         	String passw = request.getParameter("password");
+                String confirmPass = request.getParameter("confirmPass");
        	 
         	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/";
         	HttpURLConnection connection = null;
@@ -48,9 +48,9 @@ public class Login extends HttpServlet {
         	connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
         	// Enviar los datos
-        	//String postData = "string1=" + user + "&string2=" + passw;
                 String postData = "username="+java.net.URLEncoder.encode(user, "UTF-8")+"&password="
-                        +java.net.URLEncoder.encode(passw, "UTF-8");
+                        +java.net.URLEncoder.encode(passw, "UTF-8")+
+                        "&confirmPass="+java.net.URLEncoder.encode(confirmPass, "UTF-8");
         	OutputStream os = connection.getOutputStream();
         	os.write(postData.getBytes());
         	//os.flush();
@@ -59,27 +59,13 @@ public class Login extends HttpServlet {
         	int responseCode = connection.getResponseCode();
         	System.out.println("Statuscode"+responseCode);
        	 
-        	if (1 == 1) {
-           	 
-            	HttpSession sesion = request.getSession(true);
-            	sesion.setAttribute("user", user);
-            	response.sendRedirect("menu.jsp");
-        	}   
+        	
+            	response.sendRedirect("login.jsp");
+        	 
        	 
     	} catch (IOException e) {
         	System.err.println(e.getMessage());
-    	}   	 
-
+    	}   
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

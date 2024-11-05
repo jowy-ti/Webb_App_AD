@@ -33,16 +33,16 @@ public class JakartaEE91Resource {
                 // Se comprueba si se ha enviado un usuario o contraseña vacios
                 if(username.isEmpty() || password.isEmpty()) {
                     return Response.status(Response.Status.NOT_ACCEPTABLE)
-                            .entity("Invalid credentials: null")
+                            .entity("{\"error\": \"Invalid credentials: null\"}")
                             .build();
                 }
 
                 // Se comprueba si existe la cuenta, si existe dejamos pasar
                 int res = QueryDB.exists_user(username,password);
 
-                if (res == 0) return Response.accepted().build();
+                if (res == 0) return Response.ok().build();
                 else return Response.status(Response.Status.UNAUTHORIZED)
-                            .entity("Invalid username or password")
+                            .entity("{\"error\": \"Invalid credentials\"}")
                             .build(); //error
 
             } catch (Exception e) {
@@ -71,13 +71,13 @@ public class JakartaEE91Resource {
             // Se comprueba si se ha enviado un usuario o contraseña vacios
             if (username.isEmpty() || password.isEmpty()) {
                 return Response.status(Response.Status.NOT_ACCEPTABLE)
-                        .entity("Invalid credentials: null")
+                        .entity("{\"error\": \"Invalid credentials: null\"}")
                         .build();
             }
             
             if (password.equals(confirmPass)) 
                 return Response.status(Response.Status.NOT_ACCEPTABLE)
-                        .entity("Invalid credentials: null")
+                        .entity("{\"error\": \"Invalid credentials\"}")
                         .build();
 
             // Comprabamos si existen las cuentas y en caso de no existir se crean
@@ -86,14 +86,14 @@ public class JakartaEE91Resource {
             if (res == -2) {
                 res = UpdateDB.add_user(username, password);
                 
-                if (res == 0) Response.accepted().build();
+                if (res == 0) Response.ok().build();
 
                 else return Response.status(Response.Status.EXPECTATION_FAILED)
-                        .entity("Failed to register")
+                        .entity("{\"error\": \"Failed to register\"}")
                         .build(); //error
             }
             else return Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("Invalid username or password")
+                        .entity("{\"error\": \"Invalid username or password\"}")
                         .build(); //error
             
         } catch (Exception e) {
@@ -123,8 +123,21 @@ public class JakartaEE91Resource {
     @FormParam("author") String author,
     @FormParam("creator") String creator,
     @FormParam("capture") String capt_date) {
-
-        return null;
+        //No dejamos que ningun parametro sea null
+        if (title.isEmpty() || description.isEmpty() || keywords.isEmpty() ||
+                author.isEmpty() || creator.isEmpty() || capt_date.isEmpty()) 
+            return Response.status(Response.Status.NOT_ACCEPTABLE)
+                        .entity("{\"error\": \"Some field is null\"}")
+                        .build();
+        
+        //filename no importa, le ponemos el mismo que el titulo
+        int res = DB.UpdateDB.add_image(title, creator, keywords, author, creator, capt_date, title);
+        
+        if (res == 0) //todo bien
+            return Response.ok().build();
+        else return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed registring the image\"}")
+                .build();
 
     }
     /**

@@ -21,6 +21,9 @@
                 <label for="password">Contraseña:</label>
                 <input type="password" id="password" name="password" />
                               
+                <label for="confirmPass">Confirma la contraseña:</label>
+                <input type="password" id="confirmPass" name="confirmPass" />
+                
                 <button type="submit">Register</button>
             </ul>
         </form>
