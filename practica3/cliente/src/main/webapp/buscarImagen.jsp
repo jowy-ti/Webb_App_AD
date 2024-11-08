@@ -33,12 +33,12 @@
                     <input type="text" id="id" name="id" />
                     <br/>
                     </c:if>
-                    <c:if test="${sessionScope.election == 'title'}">
+                    <c:if test="${sessionScope.election == 'title' or sessionScope.election == 'title_author'}">
                     <label for="title">Título:</label>
                     <input type="text" id="title" name="title" />
                     <br/>
                     </c:if>
-                    <c:if test="${sessionScope.election == 'author'}">
+                    <c:if test="${sessionScope.election == 'author' or sessionScope.election == 'title_author'}">
                     <label for="author">Autor:</label>
                     <input type="text" id="author" name="author" />
                     <br/>

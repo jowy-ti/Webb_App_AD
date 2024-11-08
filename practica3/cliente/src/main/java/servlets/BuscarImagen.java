@@ -57,10 +57,11 @@ public class BuscarImagen extends HttpServlet {
             String urlstring = null;
                    	 
             if (id != null) urlstring = begin_url + "searchID/" + id;
-            else if (title != null) urlstring = begin_url + "searchTitle/" + title;
             else if (date != null) urlstring = begin_url + "searchCreationDate/" + date;
-            else if (author != null) urlstring = begin_url + "searchAuthor/" + author;
             else if (keywords != null) urlstring = begin_url + "searchKeywords/" + keywords;
+            else if (title != null && author != null)  urlstring = begin_url + "searchTitle_Author/" + title + "/" + author;
+            else if (title != null) urlstring = begin_url + "searchTitle/" + title;
+            else if (author != null) urlstring = begin_url + "searchAuthor/" + author;
             
             if (urlstring == null) {
                 response.sendRedirect("error_out.jsp");

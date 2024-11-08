@@ -326,4 +326,25 @@ public class JakartaEE91Resource {
                                .build();
         }
     }
+    
+    @Path("searchTitle_Author/{title}/{author}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchByTitle_Author (@PathParam("title") String title, @PathParam("author") String author) {
+        ArrayList<Image> Images = QueryDB.search_image2(title, author);
+        
+        if (Images != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(Images);
+        
+            return Response.ok(json)
+                            .type(MediaType.APPLICATION_JSON)
+                            .build();
+        }
+        else {
+            return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Data not found for Title: " + title + "and Author: +" + author + "\"}")
+                               .build();
+        }
+    }
 }

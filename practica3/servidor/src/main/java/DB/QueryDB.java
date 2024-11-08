@@ -115,6 +115,68 @@ public class QueryDB {
         }
     }
     
+    static public ArrayList<Image> search_image2(String param_title, String param_author) {
+        Connection connection = ConnectionDB.connectDB();
+        
+        try {
+            int id;
+            String title, capture_date, author, keywords, filename, creator;
+            String query, querynull;
+            PreparedStatement statement;
+            
+            String qtitle = "title LIKE ?";
+            String qauthor = "author LIKE ?";
+            
+            query = "select * from image where ";
+            querynull = "select * from image where ";
+            boolean or = false;
+            
+            //query dinámica
+            if (!param_title.isEmpty()) {
+                query = query + qtitle;
+                or = true;
+            }
+            if (!param_author.isEmpty()) {
+                if (or) query = query + " OR ";
+                query = query + qauthor;
+            }
+            
+            // Si no se ha añadido nada a la query consultamos todas las imágenes
+            if (query.equals(querynull)) query = query + "'1' = '1'";
+            
+            statement = connection.prepareStatement(query);
+            statement.setString(1, "%" + param_title + "%");
+            statement.setString(2, "%" + param_author + "%");
+            ResultSet rs = statement.executeQuery();
+            
+            ArrayList<Image> images = new ArrayList<>();
+            Image info;
+
+            while (rs.next()) {
+                id = rs.getInt("id");
+                title = rs.getString("title");
+                author = rs.getString("author");
+                keywords = rs.getString("keywords");
+                filename = rs.getString("filename");
+                capture_date = rs.getString("capture_date");
+                creator = rs.getString("creator");
+                
+                info = new Image(id, title, author, keywords, filename, capture_date, creator);
+                images.add(info);
+            }
+
+            return images;
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
+    }
+    
     static public int exists_image(String filename){
         
         // Se crea una conexión con la DB y se comprueba que ha salido bien
