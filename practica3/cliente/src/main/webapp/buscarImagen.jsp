@@ -65,28 +65,29 @@
         <c:set var="user" value="${sessionScope.user}" />
 
         <c:forEach var="imagen" items="${images}">
-            <p> Id: ${imagen.getInt("id")} </p>
-            <p> Título: ${imagen.getString("title")} </p>
-            <p> Autor: ${imagen.getString("author")} </p> 
-            <p> Palabras clave: ${imagen.getString("keywords")} </p>
-            <p> Fecha de creación: ${imagen.getString("date")} </p>
-            <p> Creador: ${imagen.getString("creator")} </p>
+            <p> Id: ${imagen['id']} </p>
+            <p> Título: ${imagen['title']} </p>
+            <p> Autor: ${imagen['author']} </p> 
+            <p> Palabras clave: ${imagen['keywords']} </p>
+            <p> Fecha de creación: ${imagen['date']} </p>
+            <p> Creador: ${imagen['creator']} </p>
             
-            <%--
-            <c:if test="${user == imagen.getString()}">
+            <c:set var="user" value="${imagen['id']}" />
+            <c:if test="${user == imagen['creator']}">
+                <c:set var="id" value="${imagen['id']}" scope="session" />
+                <c:set var="title" value="${imagen['title']}" scope="session" />
+                <c:set var="author" value="${imagen['author']}" scope="session" />
+                <c:set var="keywords" value="${imagen['keywords']}" scope="session" />
+                <c:set var="date" value="${imagen['date']}" scope="session" />
+                <c:set var="creator" value="${imagen['creator']}" scope="session" />
                 <form action="eliminarImagen" method="GET">
                     <button type="submit">Eliminar</button>    
-                    <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />    
-                    <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
                 </form>
                 <form action="modificarImagen" method="GET">     
                     <button type="submit">Modificar</button>
-                    <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
-                    <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
                 </form>
             </c:if>
             <br> <br> <br>
-            --%>
         </c:forEach>
     </body>
 </html>
