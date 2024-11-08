@@ -22,6 +22,12 @@ import java.util.ArrayList;
 @Path("jakartaee9")
 public class JakartaEE91Resource {
     
+    /**
+    * POST method to login in the application
+    * @param username
+    * @param password
+    * @return
+    */
     @Path("login")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -50,15 +56,16 @@ public class JakartaEE91Resource {
                 return Response.serverError().build();
             }        
     }
+    
     /**
-* POST method to register a new user
-* @param username
-* @param password
-* @param confirmPass
-* @return
-*/
+    * POST method to register a new user
+    * @param username
+    * @param password
+    * @param confirmPass
+    * @return
+    */
 
-@Path("registerUser")
+    @Path("registerUser")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
@@ -162,8 +169,15 @@ public class JakartaEE91Resource {
     @FormParam("author") String author,
     @FormParam("creator") String creator,
     @FormParam("capture") String capt_date) {
-
-        return null;
+        
+        int num = Integer.parseInt(id);
+        int res = DB.UpdateDB.update_image(title, description, keywords, author, capt_date, title, num);
+        
+        if (res == 0) //todo bien
+            return Response.ok().build();
+        else return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed modifying the image\"}")
+                .build();
 
     }
     /**
@@ -176,9 +190,14 @@ public class JakartaEE91Resource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteImage (@FormParam("id") String id) {
-
-        return null;
-
+        int num = Integer.parseInt(id);
+        int res = DB.UpdateDB.delete_image(num);
+        
+        if (res == 0) //todo bien
+            return Response.ok().build();
+        else return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed deleting the image\"}")
+                .build();
     }
 
     /**
