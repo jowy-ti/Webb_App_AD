@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 
+
 <% 
     HttpSession sesion = request.getSession(false);
     if (sesion.getAttribute("user") == null) response.sendRedirect("error_out.jsp");
@@ -20,7 +21,7 @@
     </head>
     <body>
         <h1>Eliminar Imagen</h1>
-        <c:set var="filename" value="${request.getParameter("filename")}" />
+        <!-- <c:set var="filename" value="${request.getParameter("filename")}" /> -->
         <form action = "eliminarImagen" method = "POST">
             <img src="uploads/${filename}" alt="${filename}" style="width:500px;height:300px;">
             <br/>

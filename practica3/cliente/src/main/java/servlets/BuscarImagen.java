@@ -17,10 +17,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonReader;
 import jakarta.servlet.RequestDispatcher;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,7 +30,7 @@ import java.io.StringReader;
  */
 @WebServlet(name = "BuscarImagen", urlPatterns = {"/BuscarImagen"})
 public class BuscarImagen extends HttpServlet {
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,6 +38,8 @@ public class BuscarImagen extends HttpServlet {
         InputStreamReader reader = null;
         BufferedReader bufferedReader = null;
         HttpURLConnection connection = null;
+        int id_int;
+        String title, author, keywords, filename, date, creator;
         
     	try {
             HttpSession sesion = request.getSession(false);
@@ -45,10 +49,10 @@ public class BuscarImagen extends HttpServlet {
             }
         	
             String id = request.getParameter("id");
-            String title = request.getParameter("title"); 
-            String author = request.getParameter("author");
-            String keywords = request.getParameter("keywords");
-            String date = request.getParameter("date");
+            title = request.getParameter("title"); 
+            author = request.getParameter("author");
+            keywords = request.getParameter("keywords");
+            date = request.getParameter("date");
             String begin_url = "http://localhost:8080/servidor/resources/jakartaee9/";
             String urlstring = null;
                    	 
@@ -87,7 +91,23 @@ public class BuscarImagen extends HttpServlet {
                 JsonReader jsonReader = Json.createReader(new StringReader(jsonResponse));
                 JsonArray jsonArray = jsonReader.readArray();
                 
-                request.setAttribute("images", jsonArray);
+                ArrayList<Image> images = new ArrayList<>();
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JsonObject jsonObject = jsonArray.getJsonObject(i);
+                    
+                    id_int = jsonObject.getInt("id");
+                    title = jsonObject.getString("title");
+                    author = jsonObject.getString("author");
+                    keywords = jsonObject.getString("keywords");
+                    filename = jsonObject.getString("filename");
+                    date = jsonObject.getString("date");
+                    creator = jsonObject.getString("creator");
+                    
+                    Image aux = new Image(id_int, title, author, keywords, filename, date, creator);
+                    images.add(aux);
+                }
+                
+                request.setAttribute("images", images);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/buscarImagen.jsp");
                 dispatcher.forward(request, response);
             }
@@ -101,6 +121,47 @@ public class BuscarImagen extends HttpServlet {
             if (reader != null) reader.close();
             
             if (connection != null) connection.disconnect(); // Cerrar la conexión
+        }
+    }
+    
+    static public class Image {
+        private int id;
+        private String title;
+        private String date;
+        private String author;
+        private String keywords;
+        private String filename;
+        private String creator;
+
+        public Image(int id, String title, String author, String keywords, String filename, String date, String creator) {
+            this.id = id;
+            this.title = title;
+            this.date = date;
+            this.author = author;
+            this.keywords = keywords;
+            this.filename = filename;
+            this.creator = creator;
+        }
+        public int getId() {
+            return id;
+        }
+        public String getTitle() {
+            return title;
+        }
+        public String getAuthor() {
+            return author;
+        }
+        public String getKeywords() {
+            return keywords;
+        }
+        public String getFilename() {
+            return filename;
+        }
+        public String getDate() {
+            return date;
+        }
+        public String getCreator() {
+            return creator;
         }
     }
 
