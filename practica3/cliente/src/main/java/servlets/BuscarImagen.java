@@ -39,7 +39,7 @@ public class BuscarImagen extends HttpServlet {
         BufferedReader bufferedReader = null;
         HttpURLConnection connection = null;
         int id_int;
-        String title, author, keywords, filename, date, creator;
+        String id, title, author, keywords, filename, date, creator, election;
         
     	try {
             HttpSession sesion = request.getSession(false);
@@ -48,23 +48,18 @@ public class BuscarImagen extends HttpServlet {
                 return;
             }
         	
-            String id = request.getParameter("id");
+            id = request.getParameter("id");
             title = request.getParameter("title"); 
             author = request.getParameter("author");
             keywords = request.getParameter("keywords");
             date = request.getParameter("date");
-            String begin_url = "http://localhost:8080/servidor/resources/jakartaee9/";
-            String urlstring = null;
-                   	 
-            if (id != null) urlstring = begin_url + "searchID/" + id;
-            else if (date != null) urlstring = begin_url + "searchCreationDate/" + date;
-            else if (keywords != null) urlstring = begin_url + "searchKeywords/" + keywords;
-            else if (title != null && author != null)  urlstring = begin_url + "searchTitle_Author/" + title + "/" + author;
-            else if (title != null) urlstring = begin_url + "searchTitle/" + title;
-            else if (author != null) urlstring = begin_url + "searchAuthor/" + author;
+            
+            election = (String) sesion.getAttribute("election");
+            
+            String urlstring = determine_election(election, id, title, author, keywords, date);
             
             if (urlstring == null) {
-                response.sendRedirect("error_out.jsp");
+                response.sendRedirect("error.jsp");
                 return;
             }
             
@@ -123,6 +118,48 @@ public class BuscarImagen extends HttpServlet {
             
             if (connection != null) connection.disconnect(); // Cerrar la conexión
         }
+    }
+    
+    static private String determine_election(String election, String id, String title, String author, String keywords, String date) {
+        String urlstring;
+        String begin_url = "http://localhost:8080/servidor/resources/jakartaee9/";
+        
+        switch (election) {
+            case "id":
+                if (id == null || id.isEmpty()) return null;
+
+                urlstring = begin_url + "searchID/" + id;
+                break;
+                    
+            case "date":
+                if (date == null || date.isEmpty()) return null;
+                urlstring = begin_url + "searchCreationDate/" + date;
+                break;
+                
+            case "keywords":
+                if (keywords == null || keywords.isEmpty()) return null;
+                urlstring = begin_url + "searchKeywords/" + keywords; 
+                break;
+                    
+            case "title":
+                if (title == null || title.isEmpty()) return null;
+                urlstring = begin_url + "searchTitle/" + title;
+                break;
+                    
+            case "author":
+                if (author == null || author.isEmpty()) return null;
+                urlstring = begin_url + "searchAuthor/" + author;
+                break;
+
+            case "title_author":
+                if ((author == null || author.isEmpty()) || (title == null || title.isEmpty())) return null;
+                urlstring = begin_url + "searchTitle_Author/" + title + "/" + author;
+                break;
+                    
+            default:
+                return null;
+        }
+        return urlstring;
     }
     
     static public class Image {

@@ -4,6 +4,7 @@
  */
 package DB;
 
+import image.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,26 +46,6 @@ public class QueryDB {
         }
     }
     
-    static public class Image {
-        private int id;
-        private String title;
-        private String date;
-        private String author;
-        private String keywords;
-        private String filename;
-        private String creator;
-
-        public Image(int id, String title, String author, String keywords, String filename, String date, String creator) {
-            this.id = id;
-            this.title = title;
-            this.date = date;
-            this.author = author;
-            this.keywords = keywords;
-            this.filename = filename;
-            this.creator = creator;
-        }
-    }
-    
     static public ArrayList<Image> search_image(int int_param, String string_param, String name_param) {
         Connection connection = ConnectionDB.connectDB();
         
@@ -85,24 +66,8 @@ public class QueryDB {
             }
             
             ResultSet rs = statement.executeQuery();
+            ArrayList<Image> images = ResultSet(rs);
             
-            int id;
-            String title, capture_date, author, keywords, filename, creator;
-            ArrayList<Image> images = new ArrayList<>();
-        
-        
-            while (rs.next()) {
-                id = rs.getInt("id");
-                title = rs.getString("title");
-                author = rs.getString("author");
-                keywords = rs.getString("keywords");
-                filename = rs.getString("filename");
-                capture_date = rs.getString("capture_date");
-                creator = rs.getString("creator");
-                
-                Image aux = new Image(id, title, author, keywords, filename, capture_date, creator);
-                images.add(aux);
-            }
             return images;
             
         } catch (SQLException e) {
@@ -119,52 +84,32 @@ public class QueryDB {
         Connection connection = ConnectionDB.connectDB();
         
         try {
-            int id;
-            String title, capture_date, author, keywords, filename, creator;
-            String query, querynull;
+            String query;
             PreparedStatement statement;
             
             String qtitle = "title LIKE ?";
             String qauthor = "author LIKE ?";
             
             query = "select * from image where ";
-            querynull = "select * from image where ";
             boolean or = false;
             
             //query dinámica
-            if (!param_title.isEmpty()) {
+            if (param_title != null) {
                 query = query + qtitle;
                 or = true;
             }
-            if (!param_author.isEmpty()) {
+            if (param_author != null) {
                 if (or) query = query + " OR ";
                 query = query + qauthor;
             }
-            
-            // Si no se ha añadido nada a la query consultamos todas las imágenes
-            if (query.equals(querynull)) query = query + "'1' = '1'";
             
             statement = connection.prepareStatement(query);
             statement.setString(1, "%" + param_title + "%");
             statement.setString(2, "%" + param_author + "%");
             ResultSet rs = statement.executeQuery();
             
-            ArrayList<Image> images = new ArrayList<>();
-            Image info;
-
-            while (rs.next()) {
-                id = rs.getInt("id");
-                title = rs.getString("title");
-                author = rs.getString("author");
-                keywords = rs.getString("keywords");
-                filename = rs.getString("filename");
-                capture_date = rs.getString("capture_date");
-                creator = rs.getString("creator");
-                
-                info = new Image(id, title, author, keywords, filename, capture_date, creator);
-                images.add(info);
-            }
-
+            ArrayList<Image> images = ResultSet(rs);
+            
             return images;
             
         } catch (SQLException e) {
@@ -175,6 +120,27 @@ public class QueryDB {
             // Se termina la conexión con la DB
             ConnectionDB.disconnectDB(connection);
         }
+    }
+    
+    static private ArrayList<Image> ResultSet(ResultSet rs) throws SQLException {
+        int id;
+        String title, capture_date, author, keywords, filename, creator;
+        ArrayList<Image> images = new ArrayList<>();
+        Image info;
+
+        while (rs.next()) {
+            id = rs.getInt("id");
+            title = rs.getString("title");
+            author = rs.getString("author");
+            keywords = rs.getString("keywords");
+            filename = rs.getString("filename");
+            capture_date = rs.getString("capture_date");
+            creator = rs.getString("creator");
+                
+            info = new Image(id, title, author, keywords, filename, capture_date, creator);
+            images.add(info);
+        }
+        return images;
     }
     
     static public int exists_image(String filename){
