@@ -49,13 +49,17 @@ public class ModifyImage extends HttpServlet {
                 return;
                 }
                 
-                String id = request.getParameter("id");
+                String id = (String) sesion.getAttribute("id");
+                sesion.removeAttribute("id");
+                
                 String title = request.getParameter("title");
         	String description = request.getParameter("description");
                 String keywords = request.getParameter("keywords");
                 String author = request.getParameter("author");
                 String creator = sesion.getAttribute("user").toString();
                 String capDate = request.getParameter("capture_date");
+                
+                
                 
         	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/modify";
         	HttpURLConnection connection = null;

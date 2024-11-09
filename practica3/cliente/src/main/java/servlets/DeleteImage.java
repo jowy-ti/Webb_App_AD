@@ -49,14 +49,23 @@ public class DeleteImage extends HttpServlet {
                 return;
                 }
                 
-                String creator = sesion.getAttribute("user").toString();
+                String creator = sesion.getAttribute("creator").toString();
                 
-                if (creator == sesion.getAttribute("user")) {
+                if (creator != null && creator == sesion.getAttribute("user")) {
                     response.sendRedirect("error.jsp");
                     return;
                 }
                 
-                String id = request.getParameter("id");
+                
+                String id = (String) sesion.getAttribute("id");
+                if (id != null) sesion.removeAttribute("id");
+                
+                //Eliminamos los metadatos de la imagen de la sesion
+                sesion.removeAttribute("title");
+                sesion.removeAttribute("author");
+                sesion.removeAttribute("keywords");
+                sesion.removeAttribute("date");
+                sesion.removeAttribute("creator");
                 
         	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/delete";
         	HttpURLConnection connection = null;

@@ -22,18 +22,20 @@
         <form action="buscarImagen.jsp" method="GET">
             <ul>
                 <button name="election" value="id">Id</button>
-                <br/> <br/>
+                <br> <br>
                 <button name="election" value="title">Título</button>
-                <br/> <br/>
+                <br> <br>
                 <button name="election" value="date">Fecha</button>
-                <br/> <br/>
+                <br> <br>
                 <button name="election" value="author">Autor</button>
-                <br/> <br/>
+                <br> <br>
                 <button name="election" value="keywords">Palabras clave</button>
+                <br> <br>
+                <button name="election" value="title_author">Título y Autor</button>
                 <br>
             </ul>
-            <br/>
-            <br/>
+            <br>
+            <br>
             <a href="menu.jsp">Return</a>
         </form>
     </body>

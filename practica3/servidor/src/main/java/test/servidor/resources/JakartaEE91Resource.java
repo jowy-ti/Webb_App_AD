@@ -1,7 +1,6 @@
 package test.servidor.resources;
 
 import DB.QueryDB;
-import DB.QueryDB.Image;
 import DB.UpdateDB;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.FormParam;
@@ -13,6 +12,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import com.google.gson.Gson;
+import image.Image;
 import java.util.ArrayList;
 
 /**
@@ -207,6 +207,7 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByTitle (@PathParam("title") String title) {
+        
         ArrayList<Image> Images = QueryDB.search_image(-1, title, "title");
         
         if (Images != null) {
@@ -233,6 +234,7 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByCreationDate (@PathParam("date") String date) {
+        
         ArrayList<Image> Images = QueryDB.search_image(-1, date, "capture_date");
         
         if (Images != null) {
@@ -258,6 +260,7 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByAuthor (@PathParam("author") String author) {
+        
         ArrayList<Image> Images = QueryDB.search_image(-1, author, "author");
         
         if (Images != null) {
@@ -283,6 +286,7 @@ public class JakartaEE91Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchByKeywords (@PathParam("keywords") String keywords) {
+        
         ArrayList<Image> Images = QueryDB.search_image(-1, keywords, "keywords");
         
         if (Images != null) {
@@ -296,6 +300,28 @@ public class JakartaEE91Resource {
         else {
             return Response.status(Response.Status.NOT_FOUND)
                                .entity("{\"error\":\"Data not found for Keywords: " + keywords + "\"}")
+                               .build();
+        }
+    }
+    
+    @Path("searchTitle_Author/{title}/{author}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchByTitle_Author (@PathParam("title") String title, @PathParam("author") String author) {
+        
+        ArrayList<Image> Images = QueryDB.search_image2(title, author);
+        
+        if (Images != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(Images);
+        
+            return Response.ok(json)
+                            .type(MediaType.APPLICATION_JSON)
+                            .build();
+        }
+        else {
+            return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Data not found for Title: " + title + "and Author: +" + author + "\"}")
                                .build();
         }
     }
