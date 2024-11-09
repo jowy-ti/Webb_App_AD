@@ -35,19 +35,11 @@ public class JakartaEE91Resource {
     public Response login(@FormParam("username") String username,
     @FormParam("password") String password) {
         try {
-                System.out.println(username);
-                // Se comprueba si se ha enviado un usuario o contraseña vacios
-                if(username.isEmpty() || password.isEmpty()) {
-                    return Response.status(Response.Status.NOT_ACCEPTABLE)
-                            .entity("{\"error\": \"Invalid credentials: null\"}")
-                            .build();
-                }
-
                 // Se comprueba si existe la cuenta, si existe dejamos pasar
                 int res = QueryDB.exists_user(username,password);
 
                 if (res == 0) return Response.ok().build();
-                else return Response.status(Response.Status.UNAUTHORIZED)
+                else return Response.status(Response.Status.NOT_ACCEPTABLE)
                             .entity("{\"error\": \"Invalid credentials\"}")
                             .build(); //error
 
@@ -75,25 +67,13 @@ public class JakartaEE91Resource {
             @FormParam("confirmPass") String confirmPass) {
         try {
             
-            // Se comprueba si se ha enviado un usuario o contraseña vacios
-            if (username.isEmpty() || password.isEmpty()) {
-                return Response.status(Response.Status.NOT_ACCEPTABLE)
-                        .entity("{\"error\": \"Invalid credentials: null\"}")
-                        .build();
-            }
-            
-            if (password.equals(confirmPass)) 
-                return Response.status(Response.Status.NOT_ACCEPTABLE)
-                        .entity("{\"error\": \"Invalid credentials\"}")
-                        .build();
-
             // Comprabamos si existen las cuentas y en caso de no existir se crean
             int res = QueryDB.exists_user(username, password);
 
             if (res == -2) {
                 res = UpdateDB.add_user(username, password);
                 
-                if (res == 0) Response.ok().build();
+                if (res == 0) return Response.ok().build();
 
                 else return Response.status(Response.Status.EXPECTATION_FAILED)
                         .entity("{\"error\": \"Failed to register\"}")
@@ -107,7 +87,6 @@ public class JakartaEE91Resource {
             System.err.println(e.getMessage());
             return Response.serverError().build();
         } 
-        return null;
     }
     
     /**
@@ -129,13 +108,7 @@ public class JakartaEE91Resource {
     @FormParam("keywords") String keywords,
     @FormParam("author") String author,
     @FormParam("creator") String creator,
-    @FormParam("capture") String capt_date) {
-        //No dejamos que ningun parametro sea null
-        if (title.isEmpty() || description.isEmpty() || keywords.isEmpty() ||
-                author.isEmpty() || creator.isEmpty() || capt_date.isEmpty()) 
-            return Response.status(Response.Status.NOT_ACCEPTABLE)
-                        .entity("{\"error\": \"Some field is null\"}")
-                        .build();
+    @FormParam("capture") String capt_date) { 
         
         //filename no importa, le ponemos el mismo que el titulo
         int res = DB.UpdateDB.add_image(title, creator, keywords, author, creator, capt_date, title);

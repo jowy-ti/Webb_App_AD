@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>REGISTER</h1>
-        <form action="register" method="post">
+        <form action="registerUser" method="post">
             <ul>
                 <label for="id_usuario">Usuario:</label>
                 <input type="text" id="id_usuario" name="id_usuario" />

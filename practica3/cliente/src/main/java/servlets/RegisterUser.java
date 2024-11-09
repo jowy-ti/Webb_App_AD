@@ -37,8 +37,18 @@ public class RegisterUser extends HttpServlet {
         	String user = request.getParameter("id_usuario");
         	String passw = request.getParameter("password");
                 String confirmPass = request.getParameter("confirmPass");
-       	 
-        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/";
+                
+                if (user.isEmpty() || passw.isEmpty() || confirmPass.isEmpty()) {
+                    response.sendRedirect("error_out.jsp");
+                    return;
+                }
+                
+                if (!passw.equals(confirmPass)) {
+                    response.sendRedirect("error_out.jsp");
+                    return;
+                }
+                    
+        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/registerUser";
         	HttpURLConnection connection = null;
         	URL url = new URL(urlstring);
         	connection = (HttpURLConnection) url.openConnection();
@@ -48,9 +58,9 @@ public class RegisterUser extends HttpServlet {
         	connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
         	// Enviar los datos
-                String postData = "username="+java.net.URLEncoder.encode(user, "UTF-8")+"&password="
-                        +java.net.URLEncoder.encode(passw, "UTF-8")+
-                        "&confirmPass="+java.net.URLEncoder.encode(confirmPass, "UTF-8");
+                String postData = "username="+java.net.URLEncoder.encode(user, "UTF-8")
+                        +"&password="+java.net.URLEncoder.encode(passw, "UTF-8")
+                        +"&confirmPass="+java.net.URLEncoder.encode(confirmPass, "UTF-8");
         	OutputStream os = connection.getOutputStream();
         	os.write(postData.getBytes());
         	//os.flush();
@@ -59,8 +69,9 @@ public class RegisterUser extends HttpServlet {
         	int responseCode = connection.getResponseCode();
         	System.out.println("Statuscode"+responseCode);
        	 
-        	
-            	response.sendRedirect("login.jsp");
+        	if (responseCode == HttpURLConnection.HTTP_OK)
+                    response.sendRedirect("login.jsp");
+                else response.sendRedirect("error_out.jsp");
         	 
        	 
     	} catch (IOException e) {

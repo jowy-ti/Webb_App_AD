@@ -38,7 +38,13 @@ public class Login extends HttpServlet {
         	String user = request.getParameter("id_usuario");
         	String passw = request.getParameter("password");
        	 
-        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/";
+                // Se comprueba si se ha enviado un usuario o contraseña vacios
+                if(user.isEmpty() || passw.isEmpty()) {
+                    response.sendRedirect("error_out.jsp");
+                    return;
+                }
+                
+        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/login";
         	HttpURLConnection connection = null;
         	URL url = new URL(urlstring);
         	connection = (HttpURLConnection) url.openConnection();
@@ -59,12 +65,13 @@ public class Login extends HttpServlet {
         	int responseCode = connection.getResponseCode();
         	System.out.println("Statuscode"+responseCode);
        	 
-        	if (1 == 1) {
+        	if (responseCode == HttpURLConnection.HTTP_OK) {
            	 
             	HttpSession sesion = request.getSession(true);
             	sesion.setAttribute("user", user);
             	response.sendRedirect("menu.jsp");
-        	}   
+        	}  
+                else response.sendRedirect("error_out.jsp");
        	 
     	} catch (IOException e) {
         	System.err.println(e.getMessage());

@@ -27,7 +27,7 @@ import java.io.StringReader;
  *
  * @author alumne
  */
-@WebServlet(name = "RegisterImage", urlPatterns = {"/register"})
+@WebServlet(name = "RegisterImage", urlPatterns = {"/registrarImagen"})
 public class RegisterImage extends HttpServlet {
 
     /**
@@ -55,8 +55,15 @@ public class RegisterImage extends HttpServlet {
                 String author = request.getParameter("author");
                 String creator = sesion.getAttribute("user").toString();
                 String capDate = request.getParameter("capture_date");
+                
+                //No dejamos que ningun parametro sea null
+                if (title.isEmpty() || description.isEmpty() || keywords.isEmpty() ||
+                    author.isEmpty() || creator.isEmpty() || capDate.isEmpty()) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
        	 
-        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/";
+        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/register";
         	HttpURLConnection connection = null;
         	URL url = new URL(urlstring);
         	connection = (HttpURLConnection) url.openConnection();

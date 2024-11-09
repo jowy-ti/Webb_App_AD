@@ -27,7 +27,7 @@ import java.io.StringReader;
  *
  * @author alumne
  */
-@WebServlet(name = "DeleteImage", urlPatterns = {"/delete"})
+@WebServlet(name = "DeleteImage", urlPatterns = {"/eliminarImagen"})
 public class DeleteImage extends HttpServlet {
 
     /**
@@ -49,8 +49,16 @@ public class DeleteImage extends HttpServlet {
                 return;
                 }
                 
+                String creator = sesion.getAttribute("user").toString();
+                
+                if (creator == sesion.getAttribute("user")) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
+                
                 String id = request.getParameter("id");
-        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/";
+                
+        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/delete";
         	HttpURLConnection connection = null;
         	URL url = new URL(urlstring);
         	connection = (HttpURLConnection) url.openConnection();
@@ -71,6 +79,7 @@ public class DeleteImage extends HttpServlet {
        	 
         	if (responseCode == HttpURLConnection.HTTP_OK) 
                     response.sendRedirect("operacionExitosa.jsp");
+                else response.sendRedirect("error_out.jps");
        	 
     	} catch (IOException e) {
         	System.err.println(e.getMessage());

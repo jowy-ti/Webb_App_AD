@@ -74,12 +74,13 @@
             
             <%--
             <c:if test="${user == imagen.getString()}">
-                <form action="eliminarImagen" method="GET">
+                <form action="eliminarImagen" method="POST">
                     <button type="submit">Eliminar</button>    
-                    <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />    
+                    <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />   
+                
                     <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />
                 </form>
-                <form action="modificarImagen" method="GET">     
+                <form action="modificarImagen" method="POST">     
                     <button type="submit">Modificar</button>
                     <input id="id" name="id" type="hidden" value="${imagen.get(4)}" />
                     <input id="filename" name="filename" type="hidden" value="${imagen.get(3)}" />

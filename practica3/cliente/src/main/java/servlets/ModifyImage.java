@@ -27,7 +27,7 @@ import java.io.StringReader;
  *
  * @author alumne
  */
-@WebServlet(name = "ModifyImage", urlPatterns = {"/modify"})
+@WebServlet(name = "ModifyImage", urlPatterns = {"/modificarImagen"})
 public class ModifyImage extends HttpServlet {
 
     /**
@@ -57,7 +57,7 @@ public class ModifyImage extends HttpServlet {
                 String creator = sesion.getAttribute("user").toString();
                 String capDate = request.getParameter("capture_date");
                 
-        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/";
+        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/modify";
         	HttpURLConnection connection = null;
         	URL url = new URL(urlstring);
         	connection = (HttpURLConnection) url.openConnection();
@@ -84,6 +84,7 @@ public class ModifyImage extends HttpServlet {
        	 
         	if (responseCode == HttpURLConnection.HTTP_OK) 
                     response.sendRedirect("operacionExitosa.jsp");
+                else response.sendRedirect("error.jsp");
        	 
     	} catch (IOException e) {
         	System.err.println(e.getMessage());
