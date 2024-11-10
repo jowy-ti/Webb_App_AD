@@ -124,12 +124,13 @@ public class QueryDB {
     
     static private ArrayList<Image> ResultSet(ResultSet rs) throws SQLException {
         int id;
-        String title, capture_date, author, keywords, filename, creator;
+        String title, capture_date, author, keywords, filename, creator, description;
         ArrayList<Image> images = new ArrayList<>();
         Image info;
 
         while (rs.next()) {
             id = rs.getInt("id");
+            description = rs.getString("description");
             title = rs.getString("title");
             author = rs.getString("author");
             keywords = rs.getString("keywords");
@@ -137,7 +138,7 @@ public class QueryDB {
             capture_date = rs.getString("capture_date");
             creator = rs.getString("creator");
                 
-            info = new Image(id, title, author, keywords, filename, capture_date, creator);
+            info = new Image(id, title, author, keywords, filename, capture_date, creator, description);
             images.add(info);
         }
         return images;

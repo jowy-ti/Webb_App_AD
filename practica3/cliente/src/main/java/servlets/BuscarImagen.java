@@ -39,7 +39,7 @@ public class BuscarImagen extends HttpServlet {
         BufferedReader bufferedReader = null;
         HttpURLConnection connection = null;
         int id_int;
-        String id, title, author, keywords, filename, date, creator, election;
+        String id, title, author, keywords, filename, date, creator, description, election;
         
     	try {
             HttpSession sesion = request.getSession(false);
@@ -93,13 +93,14 @@ public class BuscarImagen extends HttpServlet {
                     
                     id_int = jsonObject.getInt("id");
                     title = jsonObject.getString("title");
+                    description = jsonObject.getString("description");
                     author = jsonObject.getString("author");
                     keywords = jsonObject.getString("keywords");
                     filename = jsonObject.getString("filename");
                     date = jsonObject.getString("date");
                     creator = jsonObject.getString("creator");
                     
-                    Image aux = new Image(id_int, title, author, keywords, filename, date, creator);
+                    Image aux = new Image(id_int, title, author, keywords, filename, date, creator, description);
                     images.add(aux);
                 }
                 
@@ -165,15 +166,17 @@ public class BuscarImagen extends HttpServlet {
     static public class Image {
         private int id;
         private String title;
+        private String description;
         private String date;
         private String author;
         private String keywords;
         private String filename;
         private String creator;
 
-        public Image(int id, String title, String author, String keywords, String filename, String date, String creator) {
+        public Image(int id, String title, String author, String keywords, String filename, String date, String creator, String description) {
             this.id = id;
             this.title = title;
+            this.description = description;
             this.date = date;
             this.author = author;
             this.keywords = keywords;
@@ -185,6 +188,9 @@ public class BuscarImagen extends HttpServlet {
         }
         public String getTitle() {
             return title;
+        }
+        public String getDescription() {
+            return description;
         }
         public String getAuthor() {
             return author;
