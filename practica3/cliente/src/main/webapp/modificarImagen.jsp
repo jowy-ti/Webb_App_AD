@@ -30,8 +30,7 @@
             <label for="title">Título Nuevo:</label>
             <input type="text" id="title" name="title" />
             <br/>
-            <!-- Esto hay que hacerlo nuevo -->
-            <p>Descripción:</p> 
+            <p>Descripción: ${sessionScope.description}</p> 
             <label for="description">Descripción Nueva:</label>
             <input type="text" id="description" name="description" />
             <br/>
@@ -59,6 +58,7 @@
         <% 
             // Eliminar siempre los atributos de la sesión después de mostrarlos
             session.removeAttribute("title");
+            session.removeAttribute("description");
             session.removeAttribute("author");
             session.removeAttribute("keywords");
             session.removeAttribute("date");

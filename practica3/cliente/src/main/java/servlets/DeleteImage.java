@@ -62,6 +62,7 @@ public class DeleteImage extends HttpServlet {
                 
                 //Eliminamos los metadatos de la imagen de la sesion
                 sesion.removeAttribute("title");
+                sesion.removeAttribute("description");
                 sesion.removeAttribute("author");
                 sesion.removeAttribute("keywords");
                 sesion.removeAttribute("date");
