@@ -77,9 +77,10 @@
                         <c:set var="id" value="${imagen.id}" scope="session" />
                         <c:set var="title" value="${imagen.title}" scope="session" />
                         <c:set var="description" value="${imagen.description}" scope="session" />
-                        <c:set var="author" value="${imimagen.keywords}" scope="session" />
+                        <c:set var="keywords" value="${imagen.keywords}" scope="session" />
+                        <c:set var="author" value="${imagen.author}" scope="session" />
                         <c:set var="date" value="${imagen.date}" scope="session" />
-                        <c:set var="creator" value="$imagen.creator}" scope="session" />
+                        <c:set var="creator" value="${imagen.creator}" scope="session" />
                         <form action="eliminarImagen.jsp" method="POST">
                             <button type="submit">Eliminar</button>
                         </form>
