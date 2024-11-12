@@ -49,7 +49,7 @@ public class ModifyImage extends HttpServlet {
                 return;
                 }
                 
-                String id = (String) sesion.getAttribute("id");
+                String id = sesion.getAttribute("id").toString();
                 sesion.removeAttribute("id");
                 
                 String title = request.getParameter("title");

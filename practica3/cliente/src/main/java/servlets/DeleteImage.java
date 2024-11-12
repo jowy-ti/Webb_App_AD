@@ -57,7 +57,7 @@ public class DeleteImage extends HttpServlet {
                 }
                 
                 
-                String id = (String) sesion.getAttribute("id");
+                String id = sesion.getAttribute("id").toString();
                 if (id != null) sesion.removeAttribute("id");
                 
                 //Eliminamos los metadatos de la imagen de la sesion
