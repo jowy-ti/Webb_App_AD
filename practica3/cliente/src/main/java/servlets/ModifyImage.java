@@ -71,7 +71,7 @@ public class ModifyImage extends HttpServlet {
 
         	// Enviar los datos
                 String postData = "id="+java.net.URLEncoder.encode(id, "UTF-8")
-                        +"title="+java.net.URLEncoder.encode(title, "UTF-8")
+                        +"&title="+java.net.URLEncoder.encode(title, "UTF-8")
                         +"&description="+java.net.URLEncoder.encode(description, "UTF-8")
                         +"&keywords="+java.net.URLEncoder.encode(keywords, "UTF-8")
                         +"&author="+java.net.URLEncoder.encode(author, "UTF-8")
