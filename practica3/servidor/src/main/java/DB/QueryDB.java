@@ -29,7 +29,10 @@ public class QueryDB {
 
             // Miramos si existe una cuenta con "id_usuario" y "password";
             query = "select * from usuarios where id_usuario = '"+id_usuario+"' and password = '"+password+"'";
+            //query = "select * from usuarios where id_usuario = ? and password = ?";
             statement = connection.prepareStatement(query);
+            //statement.setString(1, id_usuario);
+            //statement.setString(2, password);
             ResultSet rs = statement.executeQuery(); 
             
             if (rs.next()) return 0; //Usuario existe
@@ -154,7 +157,9 @@ public class QueryDB {
             String query;
             PreparedStatement statement;
             query = "select filename from image where filename = '"+filename+"'";
+            //query = "select filename from image where filename = ?";
             statement = connection.prepareStatement(query);
+            //statement.setString(1, filename);
             ResultSet rs = statement.executeQuery(); 
             
             if (rs.next()) return 0; //Imagen con ese nombre existe
