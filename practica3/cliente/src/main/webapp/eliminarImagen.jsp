@@ -23,13 +23,13 @@
         <h1>Eliminar Imagen</h1>
         <!-- <c:set var="filename" value="${request.getParameter("filename")}" /> -->
         <form action = "eliminarImagen" method = "POST">
-            <img src="uploads/${filename}" alt="${filename}" style="width:500px;height:300px;">
+             <!-- <img src="uploads/${filename}" alt="${filename}" style="width:500px;height:300px;"> -->
             <br/>
             Esta seguro que esta es la imagen que quiere eliminar?
             <br/>
             <button type="submit">Eliminar</button>
             <br/>
-            <a href="menu.jsp">Go back to menu</a>
+            <a href="buscarImagen.jsp">Return</a>
         </form>
     </body>
 </html>
