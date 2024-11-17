@@ -13,7 +13,16 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import com.google.gson.Gson;
 import image.Image;
+import jakarta.servlet.http.Part;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import org.glassfish.jersey.media.multipart.MultiPart;
 
 /**
  *
@@ -177,20 +186,53 @@ public class JakartaEE91Resource {
     * GET method to search images by id
     * @param id
     * @return
+     * @throws java.io.FileNotFoundException
     */
     @Path("searchID/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response searchByID (@PathParam("id") int id) {
+    public Response searchByID (@PathParam("id") int id) throws FileNotFoundException, IOException {
         ArrayList<Image> Images = QueryDB.search_image(id, null, "id");
         
         if (Images != null) {
+            
             Gson gson = new Gson();
             String json = gson.toJson(Images);
+            
+            String boundary = "BoundaryString";
+            ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(responseStream), true);
+            
+            // Parte 1: JSON
+            writer.println("--" + boundary);
+            writer.println("Content-Type: application/json");
+            writer.println();
+            writer.println(json); // Imprimir el JSON
+
+            // Parte 2: Imagen
+            writer.println("--" + boundary);
+            writer.println("Content-Type: image/jpeg");
+            writer.println("Content-Transfer-Encoding: binary");
+            writer.println();
+            
+            for (int i = 0; i < Images.size(); ++i) {
+                String filename = Images.get(i).filename;
+                final String path = "/var/webapp/uploads/server/"+filename;
+                File imageFile = new File(path);
+                FileInputStream imageStream = new FileInputStream(imageFile);
+                
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = imageStream.read(buffer)) != -1) {
+                    responseStream.write(buffer, 0, bytesRead);
+                }
+            }
+            writer.println();
+            writer.println("--" + boundary + "--");
         
-            return Response.ok(json)
-                            .type(MediaType.APPLICATION_JSON)
-                            .build();
+            return Response.ok(responseStream.toByteArray())
+                    .header("Content-Type", "multipart/mixed; boundary=" + boundary)
+                    .build();
         }
         else {
             return Response.status(Response.Status.NOT_FOUND)

@@ -15,7 +15,7 @@ public class Image {
     String date;
     String author;
     String keywords;
-    String filename;
+    public String filename;
     String creator;
 
     public Image(int id, String title, String author, String keywords, String filename, String date, String creator, String description) {
