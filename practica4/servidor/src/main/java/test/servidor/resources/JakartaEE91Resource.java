@@ -19,10 +19,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import org.glassfish.jersey.media.multipart.MultiPart;
 
 /**
  *
@@ -198,45 +199,14 @@ public class JakartaEE91Resource {
             
             Gson gson = new Gson();
             String json = gson.toJson(Images);
-            
-            String boundary = "BoundaryString";
-            ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(responseStream), true);
-            
-            // Parte 1: JSON
-            writer.println("--" + boundary);
-            writer.println("Content-Type: application/json");
-            writer.println();
-            writer.println(json); // Imprimir el JSON
-
-            // Parte 2: Imagen
-            writer.println("--" + boundary);
-            writer.println("Content-Type: image/jpeg");
-            writer.println("Content-Transfer-Encoding: binary");
-            writer.println();
-            
-            for (int i = 0; i < Images.size(); ++i) {
-                String filename = Images.get(i).filename;
-                final String path = "/var/webapp/uploads/server/"+filename;
-                File imageFile = new File(path);
-                FileInputStream imageStream = new FileInputStream(imageFile);
-                
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = imageStream.read(buffer)) != -1) {
-                    responseStream.write(buffer, 0, bytesRead);
-                }
-            }
-            writer.println();
-            writer.println("--" + boundary + "--");
         
-            return Response.ok(responseStream.toByteArray())
-                    .header("Content-Type", "multipart/mixed; boundary=" + boundary)
+            return Response.ok(json)
+                    .type(MediaType.APPLICATION_JSON)
                     .build();
         }
         else {
             return Response.status(Response.Status.NOT_FOUND)
-                               .entity("{\"error\":\"Data not found for ID: " + id + "\"}")
+                               .entity("{\"error\":\"Data not found for Id: " + id + "\"}")
                                .build();
         }
     }
@@ -365,6 +335,49 @@ public class JakartaEE91Resource {
             return Response.status(Response.Status.NOT_FOUND)
                                .entity("{\"error\":\"Data not found for Title: " + title + "and Author: +" + author + "\"}")
                                .build();
+        }
+    }
+    
+    @Path("getimage/{filename}")
+    @GET
+    public Response GetImage (@PathParam("filename") String filename) throws FileNotFoundException {
+        
+        try {
+            
+            if (filename == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                       .entity("{\"error\":\"Data not found for filename: " + filename + "\"}")
+                       .type(MediaType.APPLICATION_JSON)
+                       .build();
+            }
+
+            final String path = "/var/webapp/uploads/server/";
+            File image_f = new File(path + filename);
+        
+            if (!image_f.exists() || !image_f.canRead()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                       .entity("{\"error\":\"File not found or inaccessible: " + filename + "\"}")
+                       .type(MediaType.APPLICATION_JSON)
+                       .build();
+            }
+            
+            String type = Files.probeContentType(image_f.toPath());
+        
+            if (type == null) type = "application/octet-stream"; // Tipo predeterminado
+        
+            try (InputStream image = new FileInputStream(image_f)) {
+                return Response.ok(image)
+                    .header("Content-Type", type)
+                    .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+                    .build();
+            }
+            
+        } catch (IOException e) {
+        // Manejo genérico de errores
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                       .entity("{\"error\":\"An unexpected error occurred: " + e.getMessage() + "\"}")
+                       .type(MediaType.APPLICATION_JSON)
+                       .build();
         }
     }
 }

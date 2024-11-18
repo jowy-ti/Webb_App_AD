@@ -22,6 +22,8 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonReader;
 import jakarta.servlet.RequestDispatcher;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +32,8 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "BuscarImagen", urlPatterns = {"/BuscarImagen"})
 public class BuscarImagen extends HttpServlet {
+    
+    private static final String begin_url = "http://localhost:8080/servidor/resources/jakartaee9/";
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -102,6 +106,8 @@ public class BuscarImagen extends HttpServlet {
                     
                     Image aux = new Image(id_int, title, author, keywords, filename, date, creator, description);
                     images.add(aux);
+                    
+                    downloadImage(filename);
                 }
                 
                 request.setAttribute("images", images);
@@ -121,9 +127,31 @@ public class BuscarImagen extends HttpServlet {
         }
     }
     
+    private static void downloadImage(String filename) throws IOException {
+        URL url = new URL(begin_url + "/getimage/" + filename);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Accept", "*/*");
+
+        int responseCode = connection.getResponseCode();
+        switch (responseCode) {
+            case 200:
+                try (InputStream inputStream = connection.getInputStream()) {
+                    String path_image = "/var/webapp/uploads/client/" + filename;
+                    Files.copy(inputStream, Paths.get(path_image));
+                    System.out.println("Downloaded: " + filename);
+                }   
+                break;
+            case 404:
+                System.err.println("Error: 404");
+                break;
+            default:
+                throw new IOException("Failed to download image. HTTP code: " + responseCode);
+        }
+    }
+    
     static private String determine_election(String election, String id, String title, String author, String keywords, String date) {
         String urlstring;
-        String begin_url = "http://localhost:8080/servidor/resources/jakartaee9/";
         
         switch (election) {
             case "id":
