@@ -340,6 +340,8 @@ public class JakartaEE91Resource {
     
     @Path("getimage/{filename}")
     @GET
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response GetImage (@PathParam("filename") String filename) throws FileNotFoundException {
         
         try {
@@ -351,8 +353,8 @@ public class JakartaEE91Resource {
                        .build();
             }
 
-            final String path = "/var/webapp/uploads/server/";
-            File image_f = new File(path + filename);
+            final String path = "/var/webapp/uploads/server/" + filename;
+            File image_f = new File(path);
         
             if (!image_f.exists() || !image_f.canRead()) {
                 return Response.status(Response.Status.NOT_FOUND)
@@ -365,12 +367,12 @@ public class JakartaEE91Resource {
         
             if (type == null) type = "application/octet-stream"; // Tipo predeterminado
         
-            try (InputStream image = new FileInputStream(image_f)) {
-                return Response.ok(image)
+            InputStream image = new FileInputStream(image_f);
+            
+            return Response.status(Response.Status.OK).entity(image)
                     .header("Content-Type", type)
                     .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
                     .build();
-            }
             
         } catch (IOException e) {
         // Manejo genérico de errores

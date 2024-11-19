@@ -24,6 +24,7 @@ import jakarta.servlet.RequestDispatcher;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 /**
@@ -128,7 +129,7 @@ public class BuscarImagen extends HttpServlet {
     }
     
     private static void downloadImage(String filename) throws IOException {
-        URL url = new URL(begin_url + "/getimage/" + filename);
+        URL url = new URL(begin_url + "getimage/" + filename);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Accept", "*/*");
@@ -138,7 +139,7 @@ public class BuscarImagen extends HttpServlet {
             case 200:
                 try (InputStream inputStream = connection.getInputStream()) {
                     String path_image = "/var/webapp/uploads/client/" + filename;
-                    Files.copy(inputStream, Paths.get(path_image));
+                    Files.copy(inputStream, Paths.get(path_image), StandardCopyOption.REPLACE_EXISTING);
                     System.out.println("Downloaded: " + filename);
                 }   
                 break;

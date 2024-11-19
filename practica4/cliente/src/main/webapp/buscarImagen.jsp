@@ -22,7 +22,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Busqueda</h1>
+        <h1>Búsqueda</h1>
             <c:if test="${not empty param.election}">
                 <c:set var="election" value="${param.election}" scope="session" />
             </c:if>
@@ -72,6 +72,7 @@
                     <p> Palabras clave: ${imagen.keywords} </p>
                     <p> Fecha de creación: ${imagen.date} </p>
                     <p> Creador: ${imagen.creator} </p>
+                    <img src="uploads/client/${imagen.filename}" alt="${imagen.filename}" style="width:500px;height:300px;">
 
                     <c:if test="${sessionScope.user == imagen.creator}">
                         <c:set var="id" value="${imagen.id}" scope="session" />
