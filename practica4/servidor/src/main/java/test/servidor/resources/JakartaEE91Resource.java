@@ -138,9 +138,13 @@ public class JakartaEE91Resource {
                 .build();
         }
         
-        return Response
-            .status(StatusCode)
-            .build();
+        int res = DB.UpdateDB.add_image(title, creator, keywords, author, creator, capt_date, title);
+        
+        if (res == 0) //todo bien
+            return Response.ok().build();
+        else return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed registring the image\"}")
+                .build();
     }
        
     public static Boolean writeImage(String filename, Part part) 

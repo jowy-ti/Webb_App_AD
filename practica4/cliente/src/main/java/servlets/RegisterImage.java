@@ -108,7 +108,7 @@ public class RegisterImage extends HttpServlet {
                 multipart.close();
                 
        	 
-        	if (status == 201) 
+        	if (status == HttpURLConnection.HTTP_OK) 
                     response.sendRedirect("operacionExitosa.jsp");
                 else response.sendRedirect("error.jsp");
        	 
