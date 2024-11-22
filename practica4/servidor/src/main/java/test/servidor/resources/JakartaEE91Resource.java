@@ -149,7 +149,7 @@ public class JakartaEE91Resource {
         
         InputStream content = part.getInputStream();
         
-        File targetfile = new File("/var/webapp/uploads/" + filename);
+        File targetfile = new File("/var/webapp/uploads/server" + filename);
         
         java.nio.file.Files.copy(
                 content,
@@ -162,7 +162,7 @@ public class JakartaEE91Resource {
     public static Boolean writeImage(String filename, InputStream fileInputStream)  {
         try{
             makeDirIfNotExists();
-            File targetfile = new File("/var/webapp/uploads/" + filename);
+            File targetfile = new File("/var/webapp/uploads/server" + filename);
         
             java.nio.file.Files.copy(
                     fileInputStream,
@@ -240,7 +240,7 @@ public class JakartaEE91Resource {
     {
         makeDirIfNotExists();
         
-        File targetfile = new File("/var/webapp/uploads/" + filename);
+        File targetfile = new File("/var/webapp/uploads/server" + filename);
         if(! targetfile.delete()) {
             System.out.println("ERROR: Failed to delete " + targetfile.getAbsolutePath());
             return false;
