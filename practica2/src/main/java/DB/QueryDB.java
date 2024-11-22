@@ -4,6 +4,7 @@
  */
 package DB;
 
+import image.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,8 +28,11 @@ public class QueryDB {
             PreparedStatement statement;
 
             // Miramos si existe una cuenta con "id_usuario" y "password";
-            query = "select * from usuarios where id_usuario = '"+id_usuario+"' and password = '"+password+"'";
+            //query = "select * from usuarios where id_usuario = '"+id_usuario+"' and password = '"+password+"'";
+            query = "select * from usuarios where id_usuario = ? and password = ?";
             statement = connection.prepareStatement(query);
+            statement.setString(1, id_usuario);
+            statement.setString(2, password);
             ResultSet rs = statement.executeQuery(); 
             
             if (rs.next()) return 0; //Usuario existe
@@ -45,60 +49,28 @@ public class QueryDB {
         }
     }
     
-    static public ArrayList<ArrayList<String>> search_image(String title, String author, String keywords) {
-        
-        // Se crea una conexión con la DB y se comprueba que ha salido bien
+    static public ArrayList<Image> search_image(int int_param, String string_param, String name_param) {
         Connection connection = ConnectionDB.connectDB();
         
         try {
             
-            String query, querynull;
             PreparedStatement statement;
+            String query;
             
-            String qtitle = "title LIKE '%"+title+"%'";
-            String qauthor = "author LIKE '%"+author+"%'";
-            String qkeywords = "keywords LIKE '%"+keywords+"%'";   
-            
-            query = "select * from image where ";
-            querynull = "select * from image where ";
-            boolean or = false;
-            
-            //query dinámica
-            if (!title.isEmpty()) {
-                query = query + qtitle;
-                or = true;
+            if (int_param >= 0) {
+                query = "select * from image where "+name_param+" = ?";
+                statement = connection.prepareStatement(query);
+                statement.setInt(1, int_param);
             }
-            if (!author.isEmpty()) {
-                if (or) query = query + " OR ";
-                query = query + qauthor;
-                or = true;
-            }
-            if (!keywords.isEmpty()) {
-                if (or) query = query + " OR ";
-                query = query + qkeywords;
+            else {
+                query = "select * from image where "+name_param+" LIKE ?";
+                statement = connection.prepareStatement(query);
+                statement.setString(1, "%" + string_param + "%");
             }
             
-            // Si no se ha añadido nada a la query consultamos todas las imágenes
-            if (query.equals(querynull)) query = query + "'1' = '1'";
-            
-            statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
+            ArrayList<Image> images = ResultSet(rs);
             
-            ArrayList<ArrayList<String>> images = new ArrayList<>();
-            ArrayList<String> info;
-
-            while (rs.next()) {
-                info = new ArrayList<>();
-                info.add(rs.getString("title"));
-                info.add(rs.getString("description"));
-                info.add(rs.getString("author"));
-                info.add(rs.getString("filename"));
-                info.add(rs.getString("id"));
-                info.add(rs.getString("creator"));
-                info.add(rs.getString("keywords"));
-                images.add(info);
-            }
-
             return images;
             
         } catch (SQLException e) {
@@ -111,6 +83,69 @@ public class QueryDB {
         }
     }
     
+    static public ArrayList<Image> search_image2(String param_title, String param_author) {
+        Connection connection = ConnectionDB.connectDB();
+        
+        try {
+            String query;
+            PreparedStatement statement;
+            
+            String qtitle = "title LIKE ?";
+            String qauthor = "author LIKE ?";
+            
+            query = "select * from image where ";
+            boolean or = false;
+            
+            //query dinámica
+            if (param_title != null) {
+                query = query + qtitle;
+                or = true;
+            }
+            if (param_author != null) {
+                if (or) query = query + " OR ";
+                query = query + qauthor;
+            }
+            
+            statement = connection.prepareStatement(query);
+            statement.setString(1, "%" + param_title + "%");
+            statement.setString(2, "%" + param_author + "%");
+            ResultSet rs = statement.executeQuery();
+            
+            ArrayList<Image> images = ResultSet(rs);
+            
+            return images;
+            
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
+            
+        } finally {
+            // Se termina la conexión con la DB
+            ConnectionDB.disconnectDB(connection);
+        }
+    }
+    
+    static private ArrayList<Image> ResultSet(ResultSet rs) throws SQLException {
+        int id;
+        String title, capture_date, author, keywords, filename, creator, description;
+        ArrayList<Image> images = new ArrayList<>();
+        Image info;
+
+        while (rs.next()) {
+            id = rs.getInt("id");
+            description = rs.getString("description");
+            title = rs.getString("title");
+            author = rs.getString("author");
+            keywords = rs.getString("keywords");
+            filename = rs.getString("filename");
+            capture_date = rs.getString("capture_date");
+            creator = rs.getString("creator");
+                
+            info = new Image(id, title, author, keywords, filename, capture_date, creator, description);
+            images.add(info);
+        }
+        return images;
+    }
     
     static public int exists_image(String filename){
         
@@ -121,8 +156,10 @@ public class QueryDB {
             
             String query;
             PreparedStatement statement;
-            query = "select filename from image where filename = '"+filename+"'";
+            //query = "select filename from image where filename = '"+filename+"'";
+            query = "select filename from image where filename = ?";
             statement = connection.prepareStatement(query);
+            statement.setString(1, filename);
             ResultSet rs = statement.executeQuery(); 
             
             if (rs.next()) return 0; //Imagen con ese nombre existe
@@ -168,3 +205,5 @@ public class QueryDB {
     }
     
 }
+
+

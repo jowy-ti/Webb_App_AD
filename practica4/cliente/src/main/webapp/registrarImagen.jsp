@@ -20,7 +20,7 @@
     </head>
     <body>
         <h1>Registrar Imagen</h1>
-        <form action = "registrarImagen" method = "POST">
+        <form action = "registrarImagen" method = "POST" enctype="multipart/form-data">
             
             <label for="title">Título:</label>
             <input type="text" id="title" name="title" />
@@ -37,11 +37,11 @@
             <label for="capture_date">Fecha de Captura:</label>
             <input type="text" id="capture_date" name="capture_date" />
             <br/>
-            <%--
+            
             Seleccione la imagen:
             <input type="file" name="file">
             <br/>
-            --%>
+          
             <button type="submit">Registrar</button>
             <br/>
             <br/>

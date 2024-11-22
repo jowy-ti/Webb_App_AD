@@ -23,7 +23,11 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -99,37 +103,80 @@ public class JakartaEE91Resource {
         } 
     }
     
-    /**
-    * POST method to register a new image – File is not uploaded
-    * @param title
-    * @param description
-    * @param keywords
-    * @param author
-    * @param creator
-    * @param capt_date
-    * @return
-    */
-    @Path("register")
+     /** 
+    * POST method to register a new image 
+    * @param title 
+    * @param description 
+    * @param keywords      
+    * @param author 
+    * @param creator 
+    * @param capt_date     
+     * @param filename     
+    * @param fileInputStream     
+    * @param fileMetaData     
+    * @return 
+    */ 
+    @Path("register") 
     @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response registerImage (@FormParam("title") String title,
-    @FormParam("description") String description,
-    @FormParam("keywords") String keywords,
-    @FormParam("author") String author,
-    @FormParam("creator") String creator,
-    @FormParam("capture") String capt_date) { 
+    @Consumes(MediaType.MULTIPART_FORM_DATA) 
+    @Produces(MediaType.APPLICATION_JSON) 
+    public Response registerImage (@FormDataParam("title") String title, 
+            @FormDataParam("description") String description, 
+            @FormDataParam("keywords") String keywords, 
+            @FormDataParam("author") String author, 
+            @FormDataParam("creator") String creator, 
+            @FormDataParam("capture") String capt_date,
+            @FormDataParam("filename") String filename,
+            @FormDataParam("file") InputStream fileInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileMetaData) {
         
-        //filename no importa, le ponemos el mismo que el titulo
-        int res = DB.UpdateDB.add_image(title, creator, keywords, author, creator, capt_date, title);
-        
-        if (res == 0) //todo bien
-            return Response.ok().build();
-        else return Response.status( Response.Status.EXPECTATION_FAILED)
-                .entity("{\"error\": \"Failed registring the image\"}")
+        Integer StatusCode = 201;                
+   
+        if (!writeImage(filename, fileInputStream)) { //no sha pogut guardar la imatge            
+            return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed modifying the image\"}")
                 .build();
-
+        }
+        
+        return Response
+            .status(StatusCode)
+            .build();
     }
+       
+    public static Boolean writeImage(String filename, Part part) 
+        throws IOException {
+        makeDirIfNotExists();
+        
+        InputStream content = part.getInputStream();
+        
+        File targetfile = new File("/var/webapp/uploads/" + filename);
+        
+        java.nio.file.Files.copy(
+                content,
+                targetfile.toPath(),
+                StandardCopyOption.REPLACE_EXISTING
+        );
+        
+        return true;
+    }
+    public static Boolean writeImage(String filename, InputStream fileInputStream)  {
+        try{
+            makeDirIfNotExists();
+            File targetfile = new File("/var/webapp/uploads/" + filename);
+        
+            java.nio.file.Files.copy(
+                    fileInputStream,
+                    targetfile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING
+            );  
+        } catch (IOException e){
+            return false;
+        }
+        return true; 
+    }
+    
+    
+        
     /**
     * POST method to modify an existing image
     * @param id
@@ -174,14 +221,35 @@ public class JakartaEE91Resource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteImage (@FormParam("id") String id) {
         int num = Integer.parseInt(id);
-        int res = DB.UpdateDB.delete_image(num);
         
+        String filename = DB.QueryDB.get_filename(num);
+        if (!deleteFile(filename)) 
+            return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed deleting the image\"}")
+                .build();
+        
+        int res = DB.UpdateDB.delete_image(num);
         if (res == 0) //todo bien
             return Response.ok().build();
         else return Response.status( Response.Status.EXPECTATION_FAILED)
                 .entity("{\"error\": \"Failed deleting the image\"}")
                 .build();
     }
+    
+    public static Boolean deleteFile(String filename) 
+    {
+        makeDirIfNotExists();
+        
+        File targetfile = new File("/var/webapp/uploads/" + filename);
+        if(! targetfile.delete()) {
+            System.out.println("ERROR: Failed to delete " + targetfile.getAbsolutePath());
+            return false;
+        }
+       
+        System.out.println("SUCCESS: deleted " + targetfile.getAbsolutePath());
+        return true;
+    }
+    
 
     /**
     * GET method to search images by id
@@ -380,6 +448,14 @@ public class JakartaEE91Resource {
                        .entity("{\"error\":\"An unexpected error occurred: " + e.getMessage() + "\"}")
                        .type(MediaType.APPLICATION_JSON)
                        .build();
+        }
+    }
+    
+    private static void makeDirIfNotExists() {
+        File dir = new File("/var/webapp/uploads/");
+        // Creamos directorio si no existe.
+        if (! dir.exists() ) {
+           dir.mkdirs();
         }
     }
 }
