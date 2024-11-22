@@ -138,7 +138,7 @@ public class JakartaEE91Resource {
                 .build();
         }
         
-        int res = DB.UpdateDB.add_image(title, creator, keywords, author, creator, capt_date, title);
+        int res = DB.UpdateDB.add_image(title, creator, keywords, author, creator, capt_date, filename);
         
         if (res == 0) //todo bien
             return Response.ok().build();
