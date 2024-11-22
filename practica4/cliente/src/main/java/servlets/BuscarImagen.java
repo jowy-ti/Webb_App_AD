@@ -21,8 +21,10 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonReader;
 import jakarta.servlet.RequestDispatcher;
+import java.io.File;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -133,6 +135,7 @@ public class BuscarImagen extends HttpServlet {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Accept", "*/*");
+        create_directory();
 
         int responseCode = connection.getResponseCode();
         switch (responseCode) {
@@ -148,6 +151,14 @@ public class BuscarImagen extends HttpServlet {
                 break;
             default:
                 throw new IOException("Failed to download image. HTTP code: " + responseCode);
+        }
+    }
+    
+    private static void create_directory() {
+        File dir = new File("/var/webapp/uploads/client/");
+        // Creamos directorio si no existe.
+        if (!dir.exists() ) {
+           dir.mkdirs();
         }
     }
     
