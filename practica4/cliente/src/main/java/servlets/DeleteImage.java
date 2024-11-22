@@ -51,11 +51,6 @@ public class DeleteImage extends HttpServlet {
                 
                 String creator = sesion.getAttribute("creator").toString();
                 
-                if (creator != null && creator == sesion.getAttribute("user")) {
-                    response.sendRedirect("error.jsp");
-                    return;
-                }
-                
                 
                 String id = sesion.getAttribute("id").toString();
                 if (id != null) sesion.removeAttribute("id");
@@ -67,6 +62,13 @@ public class DeleteImage extends HttpServlet {
                 sesion.removeAttribute("keywords");
                 sesion.removeAttribute("date");
                 sesion.removeAttribute("creator");
+                sesion.removeAttribute("filename");
+                
+                if (creator == null || creator != sesion.getAttribute("user")) {
+                    
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
                 
         	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/delete";
         	HttpURLConnection connection = null;

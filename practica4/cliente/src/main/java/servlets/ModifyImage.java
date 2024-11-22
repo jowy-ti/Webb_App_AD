@@ -20,8 +20,18 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonReader;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Part;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.io.OutputStream;
 import java.io.StringReader;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 
 /**
  *
@@ -49,6 +59,7 @@ public class ModifyImage extends HttpServlet {
                 return;
                 }
                 
+                
                 String id = sesion.getAttribute("id").toString();
                 sesion.removeAttribute("id");
                 
@@ -56,37 +67,47 @@ public class ModifyImage extends HttpServlet {
         	String description = request.getParameter("description");
                 String keywords = request.getParameter("keywords");
                 String author = request.getParameter("author");
-                String creator = sesion.getAttribute("user").toString();
+                String creator = sesion.getAttribute("creator").toString();
                 String capDate = request.getParameter("capture_date");
                 
+                sesion.removeAttribute("creator");
                 
+                if (creator == null || creator != sesion.getAttribute("user")) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
                 
-        	String urlstring = "http://localhost:8080/servidor/resources/jakartaee9/modify";
-        	HttpURLConnection connection = null;
-        	URL url = new URL(urlstring);
-        	connection = (HttpURLConnection) url.openConnection();
-        	connection.setRequestMethod("POST");
-        	connection.setDoOutput(true);
-        	connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                final Part fileP = request.getPart("file");
+                final String filename = fileP.getSubmittedFileName();
 
-        	// Enviar los datos
-                String postData = "id="+java.net.URLEncoder.encode(id, "UTF-8")
-                        +"&title="+java.net.URLEncoder.encode(title, "UTF-8")
-                        +"&description="+java.net.URLEncoder.encode(description, "UTF-8")
-                        +"&keywords="+java.net.URLEncoder.encode(keywords, "UTF-8")
-                        +"&author="+java.net.URLEncoder.encode(author, "UTF-8")
-                        +"&creator="+java.net.URLEncoder.encode(creator, "UTF-8")
-                        +"&capture="+java.net.URLEncoder.encode(capDate, "UTF-8");
-                        
-        	OutputStream os = connection.getOutputStream();
-        	os.write(postData.getBytes());
+                if (filename.equals("")) {
+                    response.sendRedirect("error.jsp");
+                    return;
+                }
+                
+        	final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+                StreamDataBodyPart filePart = new StreamDataBodyPart("file", fileP.getInputStream());
+                FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+                final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart
+                        .field("title", title, MediaType.TEXT_PLAIN_TYPE)
+                        .field("description", description, MediaType.TEXT_PLAIN_TYPE)
+                        .field("keywords", keywords, MediaType.TEXT_PLAIN_TYPE)
+                        .field("author", author, MediaType.TEXT_PLAIN_TYPE)
+                        .field("creator", creator, MediaType.TEXT_PLAIN_TYPE)
+                        .field("capture", capDate, MediaType.TEXT_PLAIN_TYPE)
+                        .field("filename", filename, MediaType.TEXT_PLAIN_TYPE)
+                        .bodyPart(filePart);
+
+                final WebTarget target = client.target("http://localhost:8080/servidor/resources/jakartaee9/register");
+                final Response resp = target.request().post(Entity.entity(multipart, multipart.getMediaType()));
+                int status = resp.getStatus();
+
+                formDataMultiPart.close();
+                multipart.close();
         	//os.flush();
        	 
         	// Leer la respuesta (opcional)
-        	int responseCode = connection.getResponseCode();
-        	System.out.println("Statuscode"+responseCode);
-       	 
-        	if (responseCode == HttpURLConnection.HTTP_OK) 
+        	if (status == HttpURLConnection.HTTP_OK) 
                     response.sendRedirect("operacionExitosa.jsp");
                 else response.sendRedirect("error.jsp");
        	 

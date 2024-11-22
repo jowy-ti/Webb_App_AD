@@ -20,11 +20,10 @@
     </head>
     <body>
         <h1>Modificar Imagen</h1>
-        <c:set var="filename" value="${request.getParameter("filename")}" />
-        <form action = "modificarImagen" method = "POST">
-            <%--
-            <img src="uploads/${filename}" alt="${filename}" style="width:500px;height:300px;">
-            --%>
+        <form action = "modificarImagen" method = "POST" enctype="multipart/form-data">
+            
+            <img src="uploads/server/${sessionScope.filename}" alt="${sessionScope.filename}" style="width:500px;height:300px;">
+            
             <br/>
             <p>Título: ${sessionScope.title}</p>
             <label for="title">Título Nuevo:</label>
@@ -46,11 +45,12 @@
             <label for="capture_date">Fecha de Captura Nueva:</label>
             <input type="text" id="capture_date" name="capture_date" />
             <br/>
-            <%--
+            
+            <p> Antigua Imagen:
             Seleccione la nueva imagen:
             <input type="file" name="file">
             <br/>
-            --%>
+            
             <button type="submit">Modificar</button>
             <br/>
             <br/>
@@ -64,7 +64,7 @@
             session.removeAttribute("author");
             session.removeAttribute("keywords");
             session.removeAttribute("date");
-            session.removeAttribute("creator");
+            session.removeAttribute("filename");
         %>
     </body>
 </html>

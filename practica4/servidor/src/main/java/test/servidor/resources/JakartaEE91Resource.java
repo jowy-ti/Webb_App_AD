@@ -111,7 +111,7 @@ public class JakartaEE91Resource {
     * @param author 
     * @param creator 
     * @param capt_date     
-     * @param filename     
+    * @param filename     
     * @param fileInputStream     
     * @param fileMetaData     
     * @return 
@@ -134,7 +134,7 @@ public class JakartaEE91Resource {
    
         if (!writeImage(filename, fileInputStream)) { //no sha pogut guardar la imatge            
             return Response.status( Response.Status.EXPECTATION_FAILED)
-                .entity("{\"error\": \"Failed modifying the image\"}")
+                .entity("{\"error\": \"Failed registering the image\"}")
                 .build();
         }
         
@@ -149,7 +149,7 @@ public class JakartaEE91Resource {
         
         InputStream content = part.getInputStream();
         
-        File targetfile = new File("/var/webapp/uploads/server" + filename);
+        File targetfile = new File("/var/webapp/uploads/server/" + filename);
         
         java.nio.file.Files.copy(
                 content,
@@ -162,7 +162,7 @@ public class JakartaEE91Resource {
     public static Boolean writeImage(String filename, InputStream fileInputStream)  {
         try{
             makeDirIfNotExists();
-            File targetfile = new File("/var/webapp/uploads/server" + filename);
+            File targetfile = new File("/var/webapp/uploads/server/" + filename);
         
             java.nio.file.Files.copy(
                     fileInputStream,
@@ -186,6 +186,9 @@ public class JakartaEE91Resource {
     * @param author
     * @param creator, used for checking image ownership
     * @param capt_date
+    * @param filename
+    * @param fileInputStream     
+    * @param fileMetaData   
     * @return
     */
     @Path("modify")
@@ -193,14 +196,34 @@ public class JakartaEE91Resource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response modifyImage (@FormParam("id") String id,
-    @FormParam("title") String title,
-    @FormParam("description") String description,
-    @FormParam("keywords") String keywords,
-    @FormParam("author") String author,
-    @FormParam("creator") String creator,
-    @FormParam("capture") String capt_date) {
+    @FormDataParam("title") String title,
+    @FormDataParam("description") String description,
+    @FormDataParam("keywords") String keywords,
+    @FormDataParam("author") String author,
+    @FormDataParam("creator") String creator,
+    @FormDataParam("capture") String capt_date,
+    @FormDataParam("filename") String filename,
+    @FormDataParam("file") InputStream fileInputStream,
+    @FormDataParam("file") FormDataContentDisposition fileMetaData) {
         
         int num = Integer.parseInt(id);
+        String old_filename = DB.QueryDB.get_filename(num);
+        
+        if (filename.equals("old_image")) {
+            
+            if (!deleteFile(old_filename)) 
+                return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed deleting the image\"}")
+                .build();
+            
+            if (!writeImage(filename, fileInputStream))  //no sha pogut guardar la imatge            
+                return Response.status( Response.Status.EXPECTATION_FAILED)
+                .entity("{\"error\": \"Failed modifying the image\"}")
+                .build();  
+            
+        }
+        
+        
         int res = DB.UpdateDB.update_image(title, description, keywords, author, capt_date, title, num);
         
         if (res == 0) //todo bien
@@ -240,7 +263,7 @@ public class JakartaEE91Resource {
     {
         makeDirIfNotExists();
         
-        File targetfile = new File("/var/webapp/uploads/server" + filename);
+        File targetfile = new File("/var/webapp/uploads/server/" + filename);
         if(! targetfile.delete()) {
             System.out.println("ERROR: Failed to delete " + targetfile.getAbsolutePath());
             return false;
@@ -452,7 +475,7 @@ public class JakartaEE91Resource {
     }
     
     private static void makeDirIfNotExists() {
-        File dir = new File("/var/webapp/uploads/");
+        File dir = new File("/var/webapp/uploads/server/");
         // Creamos directorio si no existe.
         if (! dir.exists() ) {
            dir.mkdirs();
