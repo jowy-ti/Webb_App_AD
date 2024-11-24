@@ -20,6 +20,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonReader;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -38,6 +39,7 @@ import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
  * @author alumne
  */
 @WebServlet(name = "ModifyImage", urlPatterns = {"/modificarImagen"})
+@MultipartConfig
 public class ModifyImage extends HttpServlet {
 
     /**
@@ -71,8 +73,10 @@ public class ModifyImage extends HttpServlet {
                 String capDate = request.getParameter("capture_date");
                 
                 sesion.removeAttribute("creator");
+                System.out.println(creator);
+                System.out.println(sesion.getAttribute("user"));
                 
-                if (creator == null || creator != sesion.getAttribute("user")) {
+                if (creator == null || !creator.equals(sesion.getAttribute("user"))) {
                     response.sendRedirect("error.jsp");
                     return;
                 }

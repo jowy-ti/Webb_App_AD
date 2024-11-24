@@ -75,6 +75,7 @@
                     <img src="uploads/client/${imagen.filename}" alt="${imagen.filename}" style="width:500px;height:300px;">
 
                     <c:if test="${sessionScope.user == imagen.creator}">
+                        <%-- 
                         <c:set var="id" value="${imagen.id}" scope="session" />
                         <c:set var="title" value="${imagen.title}" scope="session" />
                         <c:set var="description" value="${imagen.description}" scope="session" />
@@ -82,10 +83,28 @@
                         <c:set var="author" value="${imagen.author}" scope="session" />
                         <c:set var="date" value="${imagen.date}" scope="session" />
                         <c:set var="creator" value="${imagen.creator}" scope="session" />
+                        <c:set var="filename" value="${imagen.filename}" scope="session" />
+                        --%>
                         <form action="eliminarImagen.jsp" method="POST">
+                            <input type="hidden" name="id" value="${imagen.id}" />
+                            <input type="hidden" name="title" value="${imagen.title}" />
+                            <input type="hidden" name="description" value="${imagen.description}" />
+                            <input type="hidden" name="keywords" value="${imagen.keywords}" />
+                            <input type="hidden" name="author" value="${imagen.author}" />
+                            <input type="hidden" name="date" value="${imagen.date}" />
+                            <input type="hidden" name="creator" value="${imagen.creator}" />
+                            <input type="hidden" name="filename" value="${imagen.filename}" />
                             <button type="submit">Eliminar</button>
                         </form>
                         <form action="modificarImagen.jsp" method="POST">
+                            <input type="hidden" name="id" value="${imagen.id}" />
+                            <input type="hidden" name="title" value="${imagen.title}" />
+                            <input type="hidden" name="description" value="${imagen.description}" />
+                            <input type="hidden" name="keywords" value="${imagen.keywords}" />
+                            <input type="hidden" name="author" value="${imagen.author}" />
+                            <input type="hidden" name="date" value="${imagen.date}" />
+                            <input type="hidden" name="creator" value="${imagen.creator}" />
+                            <input type="hidden" name="filename" value="${imagen.filename}" />
                             <button type="submit">Modificar</button>
                         </form>
                     </c:if>

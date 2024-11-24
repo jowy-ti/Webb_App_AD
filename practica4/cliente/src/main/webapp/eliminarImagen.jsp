@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
 <% 
@@ -23,7 +24,7 @@
         <h1>Eliminar Imagen</h1>
         
         <form action = "eliminarImagen" method = "POST">
-            <img src="uploads/server/${sessionScope.filename}" alt="${sessionScope.filename}" style="width:500px;height:300px;">
+            <img src="uploads/server/${param.filename}" alt="${param.filename}" style="width:500px;height:300px;">
             <br/>
             Esta seguro que esta es la imagen que quiere eliminar?
             <br/>
@@ -31,5 +32,7 @@
             <br/>
             <a href="buscarImagen.jsp">Return</a>
         </form>
+        <c:set var="id" value="${param.id}" scope="session" />   
+        <c:set var="creator" value="${param.creator}" scope="session" />   
     </body>
 </html>
