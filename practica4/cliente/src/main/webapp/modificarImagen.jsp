@@ -22,8 +22,7 @@
         <h1>Modificar Imagen</h1>
         <form action = "modificarImagen" method = "POST" enctype="multipart/form-data">
             
-            <img src="uploads/server/${sessionScope.filename}" alt="${sessionScope.filename}" style="width:500px;height:300px;">
-            
+            <img src="uploads/client/${imagen.filename}" alt="${imagen.filename}" style="width:500px;height:300px;">
             <br/>
             <p>Título: ${sessionScope.title}</p>
             <label for="title">Título Nuevo:</label>

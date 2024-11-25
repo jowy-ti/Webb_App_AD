@@ -62,10 +62,9 @@ public class DeleteImage extends HttpServlet {
                 sesion.removeAttribute("keywords");
                 sesion.removeAttribute("date");
                 sesion.removeAttribute("creator");
-                sesion.removeAttribute("filename");
+                //sesion.removeAttribute("filename");
                 
-                if (creator == null || creator != sesion.getAttribute("user")) {
-                    
+                if (creator == null || !creator.equals(sesion.getAttribute("user").toString())) {
                     response.sendRedirect("error.jsp");
                     return;
                 }
@@ -87,11 +86,10 @@ public class DeleteImage extends HttpServlet {
        	 
         	// Leer la respuesta (opcional)
         	int responseCode = connection.getResponseCode();
-        	System.out.println("Statuscode"+responseCode);
        	 
         	if (responseCode == HttpURLConnection.HTTP_OK) 
                     response.sendRedirect("operacionExitosa.jsp");
-                else response.sendRedirect("error_out.jps");
+                else response.sendRedirect("error.jsp");
        	 
     	} catch (IOException e) {
         	System.err.println(e.getMessage());

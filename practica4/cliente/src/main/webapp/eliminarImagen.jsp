@@ -23,7 +23,7 @@
         <h1>Eliminar Imagen</h1>
         
         <form action = "eliminarImagen" method = "POST">
-            <img src="uploads/server/${sessionScope.filename}" alt="${sessionScope.filename}" style="width:500px;height:300px;">
+            <img src="uploads/client/${imagen.filename}" alt="${imagen.filename}" style="width:500px;height:300px;">
             <br/>
             Esta seguro que esta es la imagen que quiere eliminar?
             <br/>

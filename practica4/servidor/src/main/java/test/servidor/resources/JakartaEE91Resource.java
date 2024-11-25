@@ -138,7 +138,7 @@ public class JakartaEE91Resource {
                 .build();
         }
         
-        int res = DB.UpdateDB.add_image(title, creator, keywords, author, creator, capt_date, filename);
+        int res = DB.UpdateDB.add_image(title, description, keywords, author, creator, capt_date, filename);
         
         if (res == 0) //todo bien
             return Response.ok().build();
@@ -213,7 +213,7 @@ public class JakartaEE91Resource {
         int num = Integer.parseInt(id);
         String old_filename = DB.QueryDB.get_filename(num);
         
-        if (filename.equals("old_image")) {
+        if (!filename.equals("old_filename")) {
             
             if (!deleteFile(old_filename)) 
                 return Response.status( Response.Status.EXPECTATION_FAILED)
