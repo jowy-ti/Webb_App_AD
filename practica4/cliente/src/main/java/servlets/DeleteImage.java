@@ -20,6 +20,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonReader;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.annotation.MultipartConfig;
 import java.io.OutputStream;
 import java.io.StringReader;
 
@@ -28,6 +29,7 @@ import java.io.StringReader;
  * @author alumne
  */
 @WebServlet(name = "DeleteImage", urlPatterns = {"/eliminarImagen"})
+@MultipartConfig
 public class DeleteImage extends HttpServlet {
 
     /**
@@ -50,21 +52,23 @@ public class DeleteImage extends HttpServlet {
                 }
                 
                 String creator = sesion.getAttribute("creator").toString();
-                
+                sesion.removeAttribute("creator");
                 
                 String id = sesion.getAttribute("id").toString();
                 if (id != null) sesion.removeAttribute("id");
                 
                 //Eliminamos los metadatos de la imagen de la sesion
+                /*
                 sesion.removeAttribute("title");
                 sesion.removeAttribute("description");
                 sesion.removeAttribute("author");
                 sesion.removeAttribute("keywords");
                 sesion.removeAttribute("date");
-                sesion.removeAttribute("creator");
-                //sesion.removeAttribute("filename");
+                sesion.removeAttribute("filename");
+                */
                 
                 if (creator == null || !creator.equals(sesion.getAttribute("user").toString())) {
+                    
                     response.sendRedirect("error.jsp");
                     return;
                 }
@@ -86,10 +90,11 @@ public class DeleteImage extends HttpServlet {
        	 
         	// Leer la respuesta (opcional)
         	int responseCode = connection.getResponseCode();
+        	System.out.println("Statuscode"+responseCode);
        	 
         	if (responseCode == HttpURLConnection.HTTP_OK) 
                     response.sendRedirect("operacionExitosa.jsp");
-                else response.sendRedirect("error.jsp");
+                else response.sendRedirect("error_out.jps");
        	 
     	} catch (IOException e) {
         	System.err.println(e.getMessage());

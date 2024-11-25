@@ -82,15 +82,13 @@ public class ModifyImage extends HttpServlet {
                 final Part fileP = request.getPart("file");
                 final String filename = fileP.getSubmittedFileName();
 
-                if (filename.equals("")) {
-                    response.sendRedirect("error.jsp");
-                    return;
-                }
+                
                 
         	final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
                 StreamDataBodyPart filePart = new StreamDataBodyPart("file", fileP.getInputStream());
                 FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
                 final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart
+                        .field("id", id, MediaType.TEXT_PLAIN_TYPE)
                         .field("title", title, MediaType.TEXT_PLAIN_TYPE)
                         .field("description", description, MediaType.TEXT_PLAIN_TYPE)
                         .field("keywords", keywords, MediaType.TEXT_PLAIN_TYPE)
@@ -100,7 +98,7 @@ public class ModifyImage extends HttpServlet {
                         .field("filename", filename, MediaType.TEXT_PLAIN_TYPE)
                         .bodyPart(filePart);
 
-                final WebTarget target = client.target("http://localhost:8080/servidor/resources/jakartaee9/register");
+                final WebTarget target = client.target("http://localhost:8080/servidor/resources/jakartaee9/modify");
                 final Response resp = target.request().post(Entity.entity(multipart, multipart.getMediaType()));
                 int status = resp.getStatus();
 
@@ -108,7 +106,7 @@ public class ModifyImage extends HttpServlet {
                 multipart.close();
         	//os.flush();
        	 
-        	// Leer la respuesta (opcional)
+        	// Leer la respuesta
         	if (status == HttpURLConnection.HTTP_OK) 
                     response.sendRedirect("operacionExitosa.jsp");
                 else response.sendRedirect("error.jsp");
@@ -119,3 +117,4 @@ public class ModifyImage extends HttpServlet {
     }
 
 }
+

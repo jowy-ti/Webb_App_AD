@@ -197,23 +197,23 @@ public class JakartaEE91Resource {
     */
     @Path("modify")
     @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyImage (@FormParam("id") String id,
-    @FormDataParam("title") String title,
-    @FormDataParam("description") String description,
-    @FormDataParam("keywords") String keywords,
-    @FormDataParam("author") String author,
-    @FormDataParam("creator") String creator,
-    @FormDataParam("capture") String capt_date,
-    @FormDataParam("filename") String filename,
-    @FormDataParam("file") InputStream fileInputStream,
-    @FormDataParam("file") FormDataContentDisposition fileMetaData) {
+    public Response modifyImage (@FormDataParam("id") String id,
+        @FormDataParam("title") String title,
+        @FormDataParam("description") String description,
+        @FormDataParam("keywords") String keywords,
+        @FormDataParam("author") String author,
+        @FormDataParam("creator") String creator,
+        @FormDataParam("capture") String capt_date,
+        @FormDataParam("filename") String filename,
+        @FormDataParam("file") InputStream fileInputStream,
+        @FormDataParam("file") FormDataContentDisposition fileMetaData) {
         
         int num = Integer.parseInt(id);
         String old_filename = DB.QueryDB.get_filename(num);
         
-        if (!filename.equals("old_filename")) {
+        if (!filename.equals("old_filename") && !filename.equals("")) {
             
             if (!deleteFile(old_filename)) 
                 return Response.status( Response.Status.EXPECTATION_FAILED)
@@ -228,7 +228,7 @@ public class JakartaEE91Resource {
         }
         
         
-        int res = DB.UpdateDB.update_image(title, description, keywords, author, capt_date, title, num);
+        int res = DB.UpdateDB.update_image(title, description, keywords, author, capt_date, filename, num);
         
         if (res == 0) //todo bien
             return Response.ok().build();

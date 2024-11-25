@@ -86,7 +86,7 @@ public class ModifyImage extends HttpServlet {
         	int responseCode = connection.getResponseCode();
         	System.out.println("Statuscode"+responseCode);
        	 
-        	if (responseCode == HttpURLConnection.HTTP_OK) 
+        	if (responseCode == 200) 
                     response.sendRedirect("operacionExitosa.jsp");
                 else response.sendRedirect("error.jsp");
        	 
