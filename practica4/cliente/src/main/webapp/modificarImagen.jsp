@@ -22,7 +22,7 @@
     <body>
         <h1>Modificar Imagen</h1>
         <form action = "modificarImagen" method = "POST" enctype="multipart/form-data">
-            
+            <p> Imagen Actual: </p>
             <img src="uploads/server/${param.filename}" alt="${param.filename}" style="width:500px;height:300px;">
             
             <br/>
@@ -47,7 +47,7 @@
             <input type="text" id="capture_date" name="capture_date" />
             <br/>
             
-            <p> Antigua Imagen:
+            <br/>
             Seleccione la nueva imagen:
             <input type="file" name="file">
             <br/>

@@ -213,7 +213,7 @@ public class JakartaEE91Resource {
         int num = Integer.parseInt(id);
         String old_filename = DB.QueryDB.get_filename(num);
         
-        if (!filename.equals("old_filename") && !filename.equals("")) {
+        if (fileInputStream != null && !filename.equals(old_filename) && !filename.equals("")) {
             
             if (!deleteFile(old_filename)) 
                 return Response.status( Response.Status.EXPECTATION_FAILED)
